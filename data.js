@@ -85,10 +85,13 @@ window.APP_DATA = {
     // -------------------------
     // Lesson 2 = Reading 1a (p6–7)
     // -------------------------
-   "m1|2": {
-  title: "Lesson 2 — 1a Reading: Take up a hobby",
+  "m1|2": {
+  title: "Lesson 2 — 1a Take up a hobby",
   bookPage: 6,
 
+  /* =====================
+     VOCABULARY
+     ===================== */
   vocabCards: [
     { emoji:"🖥️", en:"screen", ru:"экран", tts:"screen" },
     { emoji:"🤝", en:"support", ru:"поддерживать", tts:"support" },
@@ -98,10 +101,21 @@ window.APP_DATA = {
     { emoji:"⭐", en:"talented", ru:"талантливый", tts:"talented" }
   ],
 
+  /* =====================
+     EX 1 — Vocabulary (intro)
+     ===================== */
+  exercise1: {
+    title: "Ex 1 — Look at the words",
+    note: "Look at the words and remember their meanings."
+  },
+
+  /* =====================
+     READING
+     ===================== */
   readingA: {
     title: "Text A — Paint Wars",
     text:
-`Arman loves paintball. At weekends he meets his team in an outdoor area and they play games in the woods.
+`Arman loves paintball. At weekends he meets his team outdoors and they play games in the woods.
 Players run, hide behind trees and try to tag the other team with paintballs.
 Arman says paintball is exciting, but you must wear protection and follow the rules.`
   },
@@ -114,20 +128,26 @@ She has her own channel where she shares short videos and tips.
 Her family supports her, but they remind her to take breaks and not sit too long in front of a screen.`
   },
 
+  /* =====================
+     EX 2 — True / False
+     ===================== */
   trueFalse: {
-    title: "Ex 3 — True / False",
+    title: "Ex 2 — True / False",
     items: [
       { q:"1 Arman plays paintball outdoors.", a:true },
-      { q:"2 Players hide behind trees in the game.", a:true },
-      { q:"3 Paintball is always safe without rules.", a:false },
+      { q:"2 Players hide behind trees.", a:true },
+      { q:"3 Paintball is always safe.", a:false },
       { q:"4 Aruzhan plays online with people from other countries.", a:true },
       { q:"5 Aruzhan never makes videos.", a:false },
       { q:"6 Aruzhan’s family supports her hobby.", a:true }
     ]
   },
 
+  /* =====================
+     EX 3 — Complete the sentences
+     ===================== */
   complete: {
-    title: "Ex 4 — Complete the sentences",
+    title: "Ex 3 — Complete the sentences",
     items: [
       { q:"Don’t sit too close to the ________ .", a:"screen" },
       { q:"Serik is really ________ at football.", a:"talented" },
@@ -136,7 +156,100 @@ Her family supports her, but they remind her to take breaks and not sit too long
       { q:"Classmates ________ him in matches.", a:"support" },
       { q:"Look out! Someone is ________ you!", a:"chasing" }
     ]
-  }
+  },
+
+  /* =====================
+     EX 4 — Answer the questions
+     ===================== */
+  exercise4: {
+    title: "Ex 4 — Answer the questions",
+    items: [
+      { q:"What hobby does Arman like?", a:"paintball" },
+      { q:"Where do they play paintball?", a:"in the woods" },
+      { q:"Why must players wear protection?", a:"because it is dangerous" }
+    ]
+  },
+
+  /* =====================
+     EX 5 — Speaking
+     ===================== */
+  speaking: {
+    title: "Ex 5 — Speaking",
+    prompts: [
+      "What hobbies do you like?",
+      "Which hobby would you like to take up?",
+      "Why do you like it?"
+    ]
+  },
+
+  /* =====================
+     EX 6 — Vocabulary (MCQ)
+     ===================== */
+  exercise6: {
+    title: "Ex 6 — Choose the correct word",
+    items: [
+      { q:"1 Don’t sit too close to the ____.", opts:["screen","tournament","support"], a:"screen" },
+      { q:"2 Noise makes ____ difficult.", opts:["talented","concentration","chase"], a:"concentration" },
+      { q:"3 Adel is playing in a chess ____.", opts:["support","tournament","screen"], a:"tournament" },
+      { q:"4 Classmates ____ him in matches.", opts:["support","chase","talented"], a:"support" },
+      { q:"5 Look out! Someone is ____ you!", opts:["chasing","supporting","screening"], a:"chasing" }
+    ]
+  },
+
+  /* =====================
+     EX 7 — Reading (MCQ)
+     ===================== */
+  exercise7: {
+    title: "Ex 7 — Choose the correct answer",
+    items: [
+      { q:"1 Arman’s hobby is …", opts:["paintball","yoga","cooking"], a:"paintball" },
+      { q:"2 They play paintball in …", opts:["the woods","a classroom","a shop"], a:"the woods" },
+      { q:"3 Players hide behind …", opts:["trees","cars","desks"], a:"trees" },
+      { q:"4 Aruzhan shares …", opts:["videos and tips","paintballs","homework"], a:"videos and tips" }
+    ]
+  },
+
+  /* =====================
+     EX 8 — Short answers
+     ===================== */
+  exercise8: {
+    title: "Ex 8 — Write short answers",
+    items: [
+      { q:"What hobby does Arman like?", a:"paintball" },
+      { q:"Where do they play paintball?", a:"in the woods" },
+      { q:"Why must players wear protection?", a:"because it is dangerous" }
+    ]
+  },
+
+  /* =====================
+     EX 9 — Writing
+     ===================== */
+  exercise9: {
+    title: "Ex 9 — Writing",
+    note: "Write an email / short text about a hobby (4–6 sentences).",
+    writing: {
+      placeholder: "Write here...",
+      plan: [
+        "What is your hobby?",
+        "How often do you do it?",
+        "Why do you like it?",
+        "Is it safe / difficult / expensive?",
+        "Ask a question to your friend."
+      ],
+      rewardStars: 1
+    }
+  },
+
+  /* =====================
+     THINK
+     ===================== */
+  extras: [
+    {
+      type:"think",
+      title:"THINK!",
+      note:"Which hobby would you like to take up? Why?"
+    }
+  ]
 },
 
     // -------------------------

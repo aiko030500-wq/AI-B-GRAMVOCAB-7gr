@@ -2,9 +2,13 @@
   --pageBg:#eefaf4;
   --cardBg: rgba(255,255,255,.92);
   --ink:#0b1b16;
+
+  /* print watermark color set by JS */
+  --wmColor: rgba(0,0,0,.25);
 }
 
 *{box-sizing:border-box}
+
 body{
   margin:0;
   font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial;
@@ -12,8 +16,19 @@ body{
   color:var(--ink);
 }
 
+/* layout */
 .wrap{max-width:680px;margin:0 auto;padding:14px 14px 28px}
+.grid{display:grid;gap:12px;margin-top:14px}
+.line{height:1px;background:rgba(0,0,0,.08);margin:12px 0}
 
+.title{font-weight:900;font-size:16px}
+.muted{opacity:.7;font-size:12px;margin-top:6px}
+.small{font-size:12px;opacity:.75}
+
+.ok{color:#0aa35f;font-weight:900}
+.no{color:#ff3b30;font-weight:900}
+
+/* top bar */
 .top{
   border-radius:22px;
   padding:16px 16px;
@@ -30,8 +45,7 @@ body{
 .h1{font-weight:900;font-size:18px}
 .sub{opacity:.9;margin-top:4px;font-size:13px}
 
-.grid{display:grid;gap:12px;margin-top:14px}
-
+/* cards */
 .card{
   border-radius:18px;
   padding:14px;
@@ -40,6 +54,7 @@ body{
   border:3px solid rgba(0,0,0,.06);
 }
 
+/* buttons */
 .btnRow{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
 .btn{
   border:0;border-radius:14px;padding:12px 14px;
@@ -52,10 +67,7 @@ body{
 }
 .btnPrimary{color:#fff}
 
-.title{font-weight:900;font-size:16px}
-.muted{opacity:.7;font-size:12px;margin-top:6px}
-.small{font-size:12px;opacity:.75}
-
+/* module/lesson cards */
 .lessonCard{
   border-radius:18px;
   padding:14px;
@@ -72,6 +84,7 @@ body{
   background:rgba(11,27,22,.06);
 }
 
+/* sticky bottom bar (chat) */
 .bottomBar{
   position: sticky;
   bottom: 10px;
@@ -91,8 +104,7 @@ body{
   box-shadow:0 12px 26px rgba(0,0,0,.10);
 }
 
-.line{height:1px;background:rgba(0,0,0,.08);margin:12px 0}
-
+/* login */
 .loginCard{
   border-radius:22px;
   padding:16px;
@@ -103,6 +115,7 @@ body{
 }
 .label{font-weight:900;margin:10px 0 6px}
 
+/* inputs */
 .input{
   width:100%;
   border-radius:14px;
@@ -112,6 +125,7 @@ body{
   background:rgba(255,255,255,.92);
 }
 
+/* vocabulary cards */
 .vgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-top:10px}
 .vcard{
   background:rgba(255,255,255,.92);
@@ -132,6 +146,7 @@ body{
 .ven{font-weight:900;margin-top:6px}
 .vru{opacity:.75;font-size:12px;margin-top:2px}
 
+/* categorise exercise */
 .catGrid{display:grid;gap:10px;margin-top:10px}
 .catBox{
   border-radius:16px;padding:10px;
@@ -149,6 +164,7 @@ body{
 }
 .pill.selected{outline:3px solid rgba(0,0,0,.12)}
 
+/* error/pre blocks (optional) */
 .pre{
   white-space:pre-wrap;
   background:#0b1b16;
@@ -158,38 +174,74 @@ body{
   overflow:auto;
   font-size:12px;
 }
-/* ================= PRINT ================= */
+
+/* ========= PRINT (Watermark + Footer) ========= */
+/* these layers exist in DOM (created by JS) */
+#printWatermark, #printFooter{ display:none; }
+
 @media print {
-  body {
-    background: #fff !important;
-  }
+  body{ background:#fff !important; }
 
-  /* скрываем всё лишнее */
-  .top, .btnRow, .bottomBar {
-    display: none !important;
-  }
+  /* hide UI controls */
+  .top, .btnRow, .bottomBar { display:none !important; }
 
-  .wrap {
-    max-width: 100% !important;
-    padding: 0 !important;
-  }
+  .wrap{ max-width:100% !important; padding:0 !important; }
+  .card, .lessonCard{ box-shadow:none !important; border:none !important; }
 
-  .card, .lessonCard {
-    box-shadow: none !important;
-    border: none !important;
-  }
-
-  /* водяной знак */
-  body::after {
-    content: "AI BAYAN · Excel 7";
+  /* watermark wrapper */
+  #printWatermark{
+    display:block !important;
     position: fixed;
-    top: 40%;
-    left: 10%;
-    font-size: 48px;
-    color: rgba(0, 0, 0, 0.08);
-    transform: rotate(-25deg);
-    pointer-events: none;
+    inset: 0;
     z-index: 9999;
+    pointer-events:none;
+  }
+
+  #printWatermark .wmWrap{
+    position:absolute;
+    top: 38%;
+    left: 8%;
+    transform: rotate(-25deg);
+    display:flex;
+    align-items:center;
+    gap:18px;
+    opacity: .10;
+  }
+
+  #printWatermark img{
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    object-fit: cover;
+  }
+
+  #printWatermark .wmText{
+    font-size: 52px;
+    font-weight: 900;
+    letter-spacing: 1px;
+    color: var(--wmColor, rgba(0,0,0,.25));
     white-space: nowrap;
   }
+
+  /* footer */
+  #printFooter{
+    display:block !important;
+    position: fixed;
+    left: 18px;
+    right: 18px;
+    bottom: 12px;
+    z-index: 9998;
+    font-size: 11px;
+    color: rgba(0,0,0,.65);
+    border-top: 1px solid rgba(0,0,0,.15);
+    padding-top: 6px;
+  }
+
+  #printFooter .row{
+    display:flex;
+    justify-content: space-between;
+    gap: 10px;
+  }
+
+  @page{ margin: 14mm; }
 }

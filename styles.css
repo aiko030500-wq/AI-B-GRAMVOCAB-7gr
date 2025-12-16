@@ -218,3 +218,54 @@ html,body{margin:0;padding:0;font-family:system-ui,-apple-system,Segoe UI,Roboto
   }
   .printFooterRow{display:flex;justify-content:space-between;gap:10px}
 }
+/* ================================
+   FIX: Exercises — ONE COLUMN
+   ================================ */
+
+/* Общий контейнер заданий */
+.exercises,
+.exercise-list,
+.task-list,
+.true-false,
+.complete,
+.mcq {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 12px;
+}
+
+/* Один вопрос = одна строка */
+.exercise-item,
+.task-item,
+.tf-item,
+.mcq-item,
+.complete-item {
+  width: 100% !important;
+  display: block !important;
+}
+
+/* Убираем grid на телефоне */
+@media (max-width: 768px) {
+  .grid,
+  .grid-2,
+  .grid-3 {
+    display: flex !important;
+    flex-direction: column !important;
+  }
+}
+
+/* Кнопки True / False — в одну линию */
+.tf-buttons {
+  display: flex;
+  gap: 10px;
+}
+
+.tf-buttons button {
+  flex: 1;
+}
+
+/* Поле ввода — на всю ширину */
+input[type="text"] {
+  width: 100%;
+  box-sizing: border-box;
+}

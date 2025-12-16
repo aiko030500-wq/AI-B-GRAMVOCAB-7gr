@@ -85,66 +85,59 @@ window.APP_DATA = {
     // -------------------------
     // Lesson 2 = Reading 1a (p6–7)
     // -------------------------
-    "m1|2": {
-      title: "Lesson 2 — Reading 1a: Take up a hobby",
-      bookPage: 6,
+   "m1|2": {
+  title: "Lesson 2 — 1a Reading: Take up a hobby",
+  bookPage: 6,
 
-      bookPages: [6,7],
-      openBookHint: "Open the PDF and read the texts on pages 6–7.",
+  vocabCards: [
+    { emoji:"🖥️", en:"screen", ru:"экран", tts:"screen" },
+    { emoji:"🤝", en:"support", ru:"поддерживать", tts:"support" },
+    { emoji:"🧠", en:"concentration", ru:"концентрация", tts:"concentration" },
+    { emoji:"🏃", en:"chase", ru:"преследовать", tts:"chase" },
+    { emoji:"🏆", en:"tournament", ru:"турнир", tts:"tournament" },
+    { emoji:"⭐", en:"talented", ru:"талантливый", tts:"talented" }
+  ],
 
-      // только задания + ответы (текст читается в PDF)
-      exercises: [
-        {
-          id:"ex3",
-          type:"tfds",
-          title:"3) Read again and mark: T / F / DS (doesn’t say)",
-          items: [
-            { q:"1 Jack plays games of paintball during the week.", a:"F" },
-            { q:"2 Jack’s team often wins the games.", a:"DS" },
-            { q:"3 A game of paintball can take a long time.", a:"T" },
-            { q:"4 Paintball is an expensive hobby.", a:"DS" },
+  readingA: {
+    title: "Text A — Paint Wars",
+    text:
+`Arman loves paintball. At weekends he meets his team in an outdoor area and they play games in the woods.
+Players run, hide behind trees and try to tag the other team with paintballs.
+Arman says paintball is exciting, but you must wear protection and follow the rules.`
+  },
 
-            { q:"5 Alex plays against gamers from other countries.", a:"T" },
-            { q:"6 Alex is a popular gamer on a website.", a:"T" },
-            { q:"7 Alex’s family think his hobby is a bad idea.", a:"F" },
-            { q:"8 Alex does not like playing real sports.", a:"F" }
-          ]
-        },
-        {
-          id:"ex4",
-          type:"fill",
-          title:"4) Complete the sentences (Vocabulary 1a, p.7)",
-          bank:["screen","support","concentration","chasing","tournament","talented"],
-          items: [
-            { q:"1 Don’t sit too close to the ________ — it’s not good for your eyes.", a:"screen" },
-            { q:"2 Serik is a really ________ football player. He wants to play for the national team.", a:"talented" },
-            { q:"3 All the noise in the street makes ________ really difficult.", a:"concentration" },
-            { q:"4 Adel is playing in a chess ________ on 5th May.", a:"tournament" },
-            { q:"5 Ali Sam’s classmates ________ him when he plays for the school team.", a:"support" },
-            { q:"6 Look out! Someone is ________ you!", a:"chasing" }
-          ]
-        },
-        {
-          id:"ex7",
-          type:"dragcat",
-          title:"7) Which hobbies in Ex.6 are: creative / related to sport / adventure? (p.7)",
-          categories:["Creative","Related to sport","Adventure"],
-          items:[
-            { text:"painting", cat:"Creative" },
-            { text:"jewellery-making", cat:"Creative" },
-            { text:"playing music", cat:"Creative" },
-            { text:"photography", cat:"Creative" },
+  readingB: {
+    title: "Text B — Gaming world",
+    text:
+`Aruzhan is a keen gamer. She plays online with people from different countries and sometimes joins competitions.
+She has her own channel where she shares short videos and tips.
+Her family supports her, but they remind her to take breaks and not sit too long in front of a screen.`
+  },
 
-            { text:"archery", cat:"Related to sport" },
-            { text:"golf", cat:"Related to sport" },
-            { text:"ice skating", cat:"Related to sport" },
+  trueFalse: {
+    title: "Ex 3 — True / False",
+    items: [
+      { q:"1 Arman plays paintball outdoors.", a:true },
+      { q:"2 Players hide behind trees in the game.", a:true },
+      { q:"3 Paintball is always safe without rules.", a:false },
+      { q:"4 Aruzhan plays online with people from other countries.", a:true },
+      { q:"5 Aruzhan never makes videos.", a:false },
+      { q:"6 Aruzhan’s family supports her hobby.", a:true }
+    ]
+  },
 
-            { text:"kart racing", cat:"Adventure" },
-            { text:"gardening", cat:"Creative" } // можно спорно, но чаще creative
-          ]
-        }
-      ]
-    },
+  complete: {
+    title: "Ex 4 — Complete the sentences",
+    items: [
+      { q:"Don’t sit too close to the ________ .", a:"screen" },
+      { q:"Serik is really ________ at football.", a:"talented" },
+      { q:"Noise makes ________ difficult.", a:"concentration" },
+      { q:"Adel is playing in a chess ________ .", a:"tournament" },
+      { q:"Classmates ________ him in matches.", a:"support" },
+      { q:"Look out! Someone is ________ you!", a:"chasing" }
+    ]
+  }
+},
 
     // -------------------------
     // Lesson 3 = Use of English 1b (p8–9)

@@ -1,792 +1,475 @@
 (() => {
+  const DATA = window.APP_DATA;
+
   const $ = (s) => document.querySelector(s);
 
-  // ===== AUTH =====
-  const STUDENT_PIN = "2844";
-  const TEACHER_LOGIN = "Teacher";
-  const TEACHER_PIN = "3244";
-
-  const studentLogins = [
-    ...Array.from({ length: 15 }, (_, i) => `7BL${i + 1}`),
-    ...Array.from({ length: 15 }, (_, i) => `7VS${i + 1}`),
-  ];
-
-  const LS_KEY = "AI_BAYAN_EXCEL7_STATE_V12";
-
-  const state = load() || {
-    user: null,
-    screen: "login",        // login | menu | teacher | module | lesson
-    activeModule: null,
-    activeLessonKey: null,  // "m1|1"
-    activeTab: "vocab",      // vocab | reading | dialogue | grammar | ex
-    stars: {},              // login_module -> stars
-    attempts: {},           // login_lesson_exId -> true (locked)
-    ai: {},                 // login_lastAI -> date
-    aiLog: ""
+  const store = {
+    get(k, d){ try{ return JSON.parse(localStorage.getItem(k)) ?? d; }catch{ return d; } },
+    set(k, v){ localStorage.setItem(k, JSON.stringify(v)); }
   };
 
-  function save() { localStorage.setItem(LS_KEY, JSON.stringify(state)); }
-  function load() { try { return JSON.parse(localStorage.getItem(LS_KEY) || ""); } catch { return null; } }
+  const state = {
+    screen: "modules", // modules | lessons | lesson | exercise
+    currentModule: null,
+    currentLessonNo: null,
+    currentLessonKey: null,
+    currentExerciseId: null,
+    shades: null,
+    stars: store.get("excel7_stars", 0),
+  };
 
-  function todayStr() {
-    const d = new Date();
-    const y = d.getFullYear();
-    const m = String(d.getMonth() + 1).padStart(2, "0");
-    const day = String(d.getDate()).padStart(2, "0");
-    return `${y}-${m}-${day}`;
+  // ===== COLOR: hex -> 8 shades, bg = lightest =====
+  function hexToRgb(hex){
+    hex = (hex || "").replace("#","").trim();
+    if(hex.length === 3) hex = hex.split("").map(c=>c+c).join("");
+    const n = parseInt(hex, 16);
+    return { r:(n>>16)&255, g:(n>>8)&255, b:n&255 };
   }
+  function rgbToHex({r,g,b}){
+    const h = (x)=> x.toString(16).padStart(2,"0");
+    return "#" + h(r) + h(g) + h(b);
+  }
+  function mix(c1, c2, t){
+    return {
+      r: Math.round(c1.r*(1-t) + c2.r*t),
+      g: Math.round(c1.g*(1-t) + c2.g*t),
+      b: Math.round(c1.b*(1-t) + c2.b*t),
+    };
+  }
+  function makeShades(hex){
+    const base = hexToRgb(hex);
+    const white = {r:255,g:255,b:255};
+    const black = {r:0,g:0,b:0};
 
-  // ===== COLOR HELPERS =====
-  function shade(hex, t) {
-    const c = (hex || "#0aa35f").replace("#", "").trim();
-    const r = parseInt(c.slice(0, 2), 16);
-    const g = parseInt(c.slice(2, 4), 16);
-    const b = parseInt(c.slice(4, 6), 16);
-    const mix = (x) => Math.max(0, Math.min(255, Math.round(x + (t >= 0 ? (255 - x) * t : x * t))));
-    return `rgb(${mix(r)},${mix(g)},${mix(b)})`;
+    const shades = [];
+    const lightSteps = [0.92, 0.84, 0.72, 0.58, 0.42];
+    lightSteps.forEach(t => shades.push(rgbToHex(mix(base, white, t))));
+    shades.push(rgbToHex(mix(base, black, 0.08)));
+    shades.push(rgbToHex(mix(base, black, 0.16)));
+    shades.push(rgbToHex(mix(base, black, 0.26)));
+    return shades;
   }
+  function applyThemeByHex(hex){
+    const shades = makeShades(hex);
 
-  // ===== STARS =====
-  function keyStars(moduleId) {
-    if (!state.user) return null;
-    return `${state.user.login}_${moduleId}`;
-  }
-  function getStarsFor(moduleId) {
-    const k = keyStars(moduleId);
-    if (!k) return 0;
-    return Number(state.stars[k] || 0);
-  }
-  function addStars(moduleId, n) {
-    const k = keyStars(moduleId);
-    if (!k) return;
-    state.stars[k] = getStarsFor(moduleId) + n;
-    save();
-  }
-  function totalStarsForLogin(login) {
-    const pref = login + "_";
-    return Object.keys(state.stars)
-      .filter(k => k.startsWith(pref))
-      .reduce((sum, k) => sum + Number(state.stars[k] || 0), 0);
-  }
-  function totalStars() {
-    if (!state.user) return 0;
-    return totalStarsForLogin(state.user.login);
-  }
+    document.documentElement.style.setProperty("--bg", shades[0]);     // ✅ фон = самый светлый
+    document.documentElement.style.setProperty("--header", hex);       // ✅ шапка = цвет модуля
 
-  // ===== ATTEMPTS (1 TRY) =====
-  function attemptKey(exId) {
-    if (!state.user || !state.activeLessonKey) return null;
-    return `${state.user.login}_${state.activeLessonKey}_${exId}`;
-  }
-  function isLocked(exId) {
-    const k = attemptKey(exId);
-    if (!k) return false;
-    return !!state.attempts[k];
-  }
-  function lockAttempt(exId) {
-    const k = attemptKey(exId);
-    if (!k) return;
-    state.attempts[k] = true;
-    save();
+    // meta theme-color
+    const meta = document.querySelector('meta[name="theme-color"]');
+    if(meta) meta.setAttribute("content", hex);
+
+    state.shades = shades;
+    return shades;
   }
 
-  // ===== AI (1/day for students) =====
-  function aiKey() { return state.user ? `${state.user.login}_lastAI` : null; }
-  function aiStatusText() {
-    if (!state.user || state.user.role !== "student") return "Teacher / unlimited";
-    const k = aiKey();
-    const last = state.ai[k] || "";
-    return (last === todayStr()) ? "Limit reached today" : "Available";
+  // ===== HELPERS =====
+  function keyAttempt(moduleId, lessonNo, exId){
+    return `attempt_${moduleId}_${lessonNo}_${exId}`;
+  }
+  function isLocked(moduleId, lessonNo, exId){
+    return store.get(keyAttempt(moduleId, lessonNo, exId), 0) >= 1;
+  }
+  function lockAttempt(moduleId, lessonNo, exId){
+    store.set(keyAttempt(moduleId, lessonNo, exId), 1);
+  }
+  function addStars(n){
+    state.stars += n;
+    store.set("excel7_stars", state.stars);
   }
 
-  // ===== RENDER =====
-  function render() {
-    const { appTitle, modules } = window.APP_DATA;
-
-    $("#app").innerHTML = `
-      <div class="wrap">
-        <div class="topbar">
-          <div class="logo">${logoEl()}</div>
-          <div class="girlBadge">${girlEl()}</div>
-          <div class="brand">
-            <b>${escapeHtml(appTitle || "AI Bayan · Excel 7")}</b>
-            <span>📗 Green book theme · Grade 7</span>
-          </div>
-          <div class="pill">
-            <span>${state.user ? (state.user.role === "teacher" ? "👩‍🏫 Teacher" : "👤 Student") : "🔒 Guest"}</span>
-            ${state.user ? `<span>•</span><b>${escapeHtml(state.user.login)}</b>` : ""}
-          </div>
-        </div>
-
-        ${state.screen === "login" ? screenLogin() : ""}
-        ${state.screen === "menu" ? screenMenu(modules) : ""}
-        ${state.screen === "teacher" ? screenTeacher() : ""}
-        ${state.screen === "module" ? screenModule(modules) : ""}
-        ${state.screen === "lesson" ? screenLesson(modules) : ""}
-      </div>
-
-      ${state.user ? bottomBar() : ""}
-      ${state.user ? aiModal() : ""}
-    `;
-
-    bind();
+  function pickVocabPairs(vocab, count){
+    const plain = vocab.map(v => ({
+      en: (v.en || "").replace(/^[^\w]+/u, "").trim(), // убрать эмодзи в матчинг
+      ru: v.ru
+    }));
+    const shuffled = plain.slice().sort(()=>Math.random()-0.5);
+    return shuffled.slice(0, Math.min(count, shuffled.length));
   }
 
-  function logoEl() {
-    return `<img src="logo.png" alt="logo"
-      onerror="this.style.display='none'; this.parentElement.innerHTML='📗';" />`;
-  }
-  function girlEl() {
-    return `<img src="girl.png" alt="girl"
-      onerror="this.style.display='none'; this.parentElement.innerHTML='👧';" />`;
-  }
-
-  // ===== SCREENS =====
-  function screenLogin() {
+  // ===== UI TEMPLATES =====
+  function headerHTML(sub){
     return `
-      <div class="card">
-        <div class="grid">
-          <div class="col-6">
-            <div class="label">Login</div>
-            <input id="login" class="input" placeholder="7BL1...7BL15 / 7VS1...7VS15 / Teacher" autocomplete="off"/>
-          </div>
-          <div class="col-6">
-            <div class="label">PIN</div>
-            <input id="pin" class="input" placeholder="****" type="password" autocomplete="off"/>
-          </div>
-          <div class="col-12 row">
-            <button id="btnLogin" class="btn">Войти</button>
-            <span id="loginMsg" class="small"></span>
+      <div class="header">
+        <div class="headerRow">
+          <img class="logo" src="logo.png" alt="logo">
+          <div>
+            <div class="brandTitle">${DATA.appTitle}</div>
+            <div class="brandSub">${sub || ""}</div>
           </div>
         </div>
       </div>
     `;
   }
 
-  function screenMenu(modules) {
-    return `
-      <div class="card">
-        <div class="row">
-          <button id="btnLogout" class="btn secondary">Выйти</button>
-          <div class="small">⭐ Total: <b>${totalStars()}</b></div>
+  function renderModules(){
+    state.screen = "modules";
+    // общий цвет на меню — зелёный книги
+    applyThemeByHex("#0aa35f");
+
+    const cards = DATA.modules.map(m=>{
+      const b = makeShades(m.color)[3];
+      return `
+        <div class="unitCard" style="border-color:${b}" data-mid="${m.id}">
+          <div class="unitTitle">${m.title.split("—")[0].trim()}</div>
+          <div class="unitTopic">${m.title}</div>
         </div>
-
-        <div class="hr"></div>
-
-        <div class="grid">
-          ${modules.map(m => moduleCard(m)).join("")}
-        </div>
-
-        <div class="hr"></div>
-        <div class="msg">Внизу: ⭐ Stars · 🧠 AI Bayan · 📒 Journal (для Teacher)</div>
-      </div>
-    `;
-  }
-
-  function moduleCard(m) {
-    const base = m.color || "#0aa35f";
-    return `
-      <div class="col-6">
-        <div class="moduleCard" style="border-left:10px solid ${base}">
-          <div class="moduleHead">
-            <b>${escapeHtml(m.title)}</b>
-            <span class="tag">⭐ ${getStarsFor(m.id)}</span>
-          </div>
-          <div class="row" style="margin-top:10px">
-            <button class="btn secondary" data-open-module="${m.id}">Открыть</button>
-          </div>
-        </div>
-      </div>
-    `;
-  }
-
-  function screenTeacher() {
-    const rows = studentLogins.map(login => {
-      const total = totalStarsForLogin(login);
-      return `<div class="qRow" style="justify-content:space-between">
-        <b>${escapeHtml(login)}</b>
-        <span class="small">⭐ ${total}</span>
-      </div>`;
+      `;
     }).join("");
 
-    return `
-      <div class="card">
-        <div class="row">
-          <button id="btnBackMenu" class="btn secondary">← Назад</button>
-          <b>📒 Teacher Journal</b>
+    $("#app").innerHTML = `
+      ${headerHTML("Main Menu")}
+      <div class="container">
+        ${cards}
+        <div class="card">
+          <span class="smallTag">Progress</span>
+          <h3>⭐ Total stars: ${state.stars}</h3>
+          <div class="note">Excel 7 · Modules</div>
         </div>
-        <div class="hr"></div>
-        <div class="msg">Список учеников и сумма ⭐:</div>
-        <div class="card" style="margin-top:10px">${rows}</div>
       </div>
     `;
-  }
 
-  function screenModule(modules) {
-    const m = modules.find(x => x.id === state.activeModule);
-    if (!m) return `<div class="card msg">Модуль не найден</div>`;
-
-    // ✅ разные заметные оттенки уроков
-    const lessons = Array.from({ length: m.lessonsCount }, (_, i) => {
-      const tStart = -0.55;   // темнее
-      const tEnd = 0.35;      // светлее
-      const t = tStart + (i * ((tEnd - tStart) / Math.max(1, m.lessonsCount - 1)));
-      return {
-        n: i + 1,
-        key: `${m.id}|${i + 1}`,
-        title: `Lesson ${i + 1}`,
-        color: shade(m.color || "#0aa35f", t),
-      };
+    document.querySelectorAll(".unitCard").forEach(el=>{
+      el.addEventListener("click", ()=>{
+        const mod = DATA.modules.find(x=>x.id === el.dataset.mid);
+        openModule(mod);
+      });
     });
+  }
 
-    return `
-      <div class="card">
-        <div class="row">
-          <button id="btnBack" class="btn secondary">← Menu</button>
-          <div class="small"><b>${escapeHtml(m.title)}</b> · ⭐ ${getStarsFor(m.id)}</div>
+  function openModule(mod){
+    state.screen = "lessons";
+    state.currentModule = mod;
+    state.currentLessonNo = null;
+    state.currentLessonKey = null;
+    state.currentExerciseId = null;
+
+    const shades = applyThemeByHex(mod.color);
+
+    const lessonBtns = Array.from({length: mod.lessonsCount}, (_,i)=>{
+      const n = i+1;
+      const bg = shades[(n % 7) + 1]; // 2..8 оттенки
+      return `<button class="lessonBtn" style="background:${bg}" data-ln="${n}">Lesson ${n}</button>`;
+    }).join("");
+
+    $("#app").innerHTML = `
+      ${headerHTML(mod.title)}
+      <div class="container">
+        <div class="toolbar">
+          <button class="pill" id="backMain">⬅ Main menu</button>
+          <button class="pill" id="openPdf">📘 Book</button>
         </div>
 
-        <div class="hr"></div>
+        <div class="card">
+          <span class="smallTag">Module</span>
+          <h3>${mod.title}</h3>
+          <div class="note">Choose a lesson</div>
+        </div>
 
-        <div class="lessons">
-          ${lessons.map(L => `
-            <button class="lessonBtn" data-lesson="${L.key}"
-              style="background:linear-gradient(135deg, ${L.color}, rgba(255,255,255,.15));">
-              <b>${escapeHtml(L.title)}</b>
-              <span>${window.APP_DATA.lessonContent[L.key] ? "✅ content ready" : "… soon"}</span>
-            </button>
-          `).join("")}
+        <div class="lessonGrid" id="lessonsWrap">
+          ${lessonBtns}
         </div>
       </div>
     `;
+
+    $("#backMain").onclick = renderModules;
+    $("#openPdf").onclick = () => { window.open(DATA.bookPdf, "_blank"); };
+
+    document.querySelectorAll(".lessonBtn").forEach(b=>{
+      b.addEventListener("click", ()=>{
+        const ln = Number(b.dataset.ln);
+        openLesson(mod, ln);
+      });
+    });
   }
 
-  function screenLesson(modules) {
-    const key = state.activeLessonKey;
-    const content = window.APP_DATA.lessonContent[key];
-    const [mid] = key.split("|");
-    const m = modules.find(x => x.id === mid);
-    if (!m) return `<div class="card msg">Lesson not found</div>`;
+  function openLesson(mod, lessonNo){
+    state.screen = "lesson";
+    state.currentLessonNo = lessonNo;
+    state.currentLessonKey = `${mod.id}|${lessonNo}`;
 
-    const title = content?.title || `Lesson ${key}`;
+    const shades = applyThemeByHex(mod.color);
+    const lesson = DATA.lessonContent[state.currentLessonKey];
 
-    return `
-      <div class="card">
-        <div class="row">
-          <!-- ✅ две кнопки назад -->
-          <button id="btnBackToMenu" class="btn secondary">← Menu</button>
-          <button id="btnBackToModule" class="btn secondary">← Unit</button>
-
-          <button id="btnOpenBook" class="btn secondary">📖 Book</button>
-          <button id="btnPrint" class="btn">🖨 Print</button>
-
-          <span class="small"><b>${escapeHtml(title)}</b></span>
-        </div>
-
-        <div class="tabs">
-          <button class="tabBtn ${state.activeTab === "vocab" ? "active" : ""}" data-tab="vocab">Vocabulary</button>
-          <button class="tabBtn ${state.activeTab === "reading" ? "active" : ""}" data-tab="reading">Reading</button>
-          <button class="tabBtn ${state.activeTab === "dialogue" ? "active" : ""}" data-tab="dialogue">Dialogue</button>
-          <button class="tabBtn ${state.activeTab === "grammar" ? "active" : ""}" data-tab="grammar">Grammar</button>
-          <button class="tabBtn ${state.activeTab === "ex" ? "active" : ""}" data-tab="ex">Exercises</button>
-        </div>
-
-        <div class="hr"></div>
-
-        ${!content ? `<div class="msg">Контент этого урока пока не добавлен.</div>` : ""}
-
-        ${content && state.activeTab === "vocab" ? vocabView(content) : ""}
-        ${content && state.activeTab === "reading" ? readingView(content) : ""}
-        ${content && state.activeTab === "dialogue" ? dialogueView(content) : ""}
-        ${content && state.activeTab === "grammar" ? grammarView(content) : ""}
-        ${content && state.activeTab === "ex" ? exercisesView(content) : ""}
-      </div>
-    `;
-  }
-
-  // ===== VIEWS =====
-  function vocabView(c) {
-    const list = (c.vocab || []).map(w => `
-      <div class="qRow" style="justify-content:space-between">
-        <b>${escapeHtml(w.en)}</b>
-        <span class="small">${escapeHtml(w.ru)}</span>
-      </div>
-    `).join("");
-
-    return `
-      <div class="card" style="margin:0">
-        <b>Words</b>
-        <div class="hr"></div>
-        ${list || `<div class="msg">No vocabulary yet</div>`}
-        <div class="hr"></div>
-        <div class="small">Можно добавлять эмодзи прямо в data.js: "🎮 play video games"</div>
-      </div>
-    `;
-  }
-
-  function readingView(c) {
-    if (!c.reading) {
-      return `<div class="msg">Reading: нажми 📖 Book и выполняй задания на странице урока.</div>`;
-    }
-    const tasks = (c.reading.tasks || []).map((t, i) => `
-      <div class="msg" style="margin-top:10px">
-        <b>${i + 1})</b> ${escapeHtml(t.q)}
-      </div>
-    `).join("");
-    return `
-      <div class="card" style="margin:0">
-        <b>${escapeHtml(c.reading.title || "Reading")}</b>
-        <div class="hr"></div>
-        <div class="msg">${escapeHtml(c.reading.text || "")}</div>
-        <div class="hr"></div>
-        <b>Tasks</b>
-        ${tasks || `<div class="msg">No tasks yet</div>`}
-      </div>
-    `;
-  }
-
-  function dialogueView(c) {
-    if (!c.dialogue) {
-      return `<div class="msg">Dialogue: нажми 📖 Book и потренируй диалог (Everyday English).</div>`;
-    }
-    return `
-      <div class="card" style="margin:0">
-        <b>${escapeHtml(c.dialogue.title || "Dialogue")}</b>
-        <div class="hr"></div>
-        <div class="msg" style="white-space:pre-wrap">${escapeHtml(c.dialogue.model || "")}</div>
-        <div class="hr"></div>
-        <div class="msg"><b>Role play:</b><br>${escapeHtml(c.dialogue.roleplay || "")}</div>
-      </div>
-    `;
-  }
-
-  function grammarView(c) {
-    const g = c.grammar;
-    if (!g) return `<div class="msg">No grammar yet</div>`;
-    return `
-      <div class="card" style="margin:0">
-        <b>${escapeHtml(g.title || "Grammar")}</b>
-        <div class="hr"></div>
-        <div class="msg"><b>EN:</b><br>${escapeHtml(g.enRule || "")}</div>
-        <div class="msg" style="margin-top:10px"><b>RU:</b><br>${escapeHtml(g.ruRule || "")}</div>
-        <div class="msg" style="margin-top:10px"><b>FORMULA:</b><br>${escapeHtml(g.formula || "")}</div>
-      </div>
-    `;
-  }
-
-  function exercisesView(c) {
-    const vocab = c.vocab || [];
-
-    const ex1 = c.exercises?.find(x => x.id === "ex1");
-    const ex2 = c.exercises?.find(x => x.id === "ex2");
-    const ex3 = c.exercises?.find(x => x.id === "ex3");
-    const ex4 = c.exercises?.find(x => x.id === "ex4");
-
-    // Matching
-    let matchHtml = "";
-    if (ex1) {
-      const pairs = vocab.slice(0, ex1.pairsCount || 6);
-      const ruList = pairs.map(p => p.ru).sort(() => Math.random() - 0.5);
-      matchHtml = `
-        <div class="card" style="margin:0">
-          <div class="row" style="justify-content:space-between">
-            <b>${escapeHtml(ex1.title)}</b>
-            <span class="small">${isLocked("ex1") ? "LOCKED" : "1 TRY"}</span>
+    // если нет контента — показываем заглушку аккуратно
+    if(!lesson){
+      $("#app").innerHTML = `
+        ${headerHTML(mod.title)}
+        <div class="container">
+          <div class="toolbar">
+            <button class="pill" id="backModule">⬅ Module</button>
+            <button class="pill" id="backMain">⬅ Main</button>
           </div>
-          <div class="hr"></div>
-          ${pairs.map((p, i) => `
-            <div class="qRow">
-              <b style="min-width:180px">${escapeHtml(p.en)}</b>
-              <select class="input" data-match="${i}" ${isLocked("ex1") ? "disabled" : ""}>
-                <option value="">— choose RU —</option>
-                ${ruList.map(r => `<option value="${escapeAttr(r)}">${escapeHtml(r)}</option>`).join("")}
-              </select>
-            </div>
-          `).join("")}
-          <div class="row">
-            <button class="btn secondary ${isLocked("ex1") ? "locked" : ""}" id="check_ex1">Check</button>
-            <span id="msg_ex1" class="small"></span>
+          <div class="card">
+            <h3>Lesson ${lessonNo}</h3>
+            <div class="note">No content yet. Add in lessonContent: "${mod.id}|${lessonNo}"</div>
           </div>
         </div>
       `;
+      $("#backModule").onclick = ()=> openModule(mod);
+      $("#backMain").onclick = renderModules;
+      return;
     }
 
-    // Missing
-    const missingHtml = ex2 ? `
-      <div class="card" style="margin-top:12px">
-        <div class="row" style="justify-content:space-between">
-          <b>${escapeHtml(ex2.title)}</b>
-          <span class="small">${isLocked("ex2") ? "LOCKED" : "1 TRY"}</span>
+    const heroBg = `linear-gradient(135deg, ${shades[6]}, ${shades[4]})`;
+    const exButtons = (lesson.exercises || []).map((ex, idx)=>{
+      const bg = `linear-gradient(135deg, ${shades[7]}, ${shades[5]})`;
+      const locked = isLocked(mod.id, lessonNo, ex.id);
+      return `
+        <button class="exBtn ${locked ? "muted":""}" style="background:${bg}" data-ex="${ex.id}">
+          ${ex.title}
+        </button>
+      `;
+    }).join("");
+
+    const vocabList = (lesson.vocab || []).map(v=>`<div>• ${v.en} — ${v.ru}</div>`).join("");
+
+    const readingTasks = (lesson.reading?.tasks || []).map((t,i)=>`<div>• ${i+1}) ${t.q}</div>`).join("");
+
+    $("#app").innerHTML = `
+      ${headerHTML(mod.title)}
+      <div class="container">
+
+        <div class="toolbar">
+          <button class="pill" id="backModule">⬅ Module</button>
+          <button class="pill" id="backMain">⬅ Main</button>
+          <button class="pill" id="openPdf">📘 Book p.${lesson.bookPage || "-"}</button>
         </div>
-        <div class="hr"></div>
-        ${ex2.items.map((it, idx) => `
-          <div class="qRow">
-            <b style="min-width:180px">${escapeHtml(it.q)}</b>
-            <input class="input" data-miss="${idx}" placeholder="type word" ${isLocked("ex2") ? "disabled" : ""}/>
+
+        <div class="hero" style="background:${heroBg}">
+          <div>
+            <h2>Lesson ${lessonNo}</h2>
+            <p>${lesson.title}</p>
           </div>
-        `).join("")}
-        <div class="row">
-          <button class="btn secondary ${isLocked("ex2") ? "locked" : ""}" id="check_ex2">Check</button>
-          <span id="msg_ex2" class="small"></span>
+          <img class="heroImg" src="logo.png" alt="logo">
         </div>
-      </div>
-    ` : "";
 
-    // Choose
-    const chooseHtml = ex3 ? `
-      <div class="card" style="margin-top:12px">
-        <div class="row" style="justify-content:space-between">
-          <b>${escapeHtml(ex3.title)}</b>
-          <span class="small">${isLocked("ex3") ? "LOCKED" : "1 TRY"}</span>
+        <div class="card">
+          <span class="smallTag">Vocabulary</span>
+          <h3>Words</h3>
+          ${vocabList || "<div class='note'>No vocab</div>"}
         </div>
-        <div class="hr"></div>
-        ${ex3.items.map((it, idx) => `
-          <div class="qRow" style="align-items:flex-start">
-            <div style="flex:1">
-              <div class="small">${idx + 1})</div>
-              <b>${escapeHtml(it.q)}</b>
-            </div>
-            <select class="input" data-choose="${idx}" ${isLocked("ex3") ? "disabled" : ""} style="max-width:240px">
-              <option value="">— choose —</option>
-              ${it.opts.map(o => `<option value="${escapeAttr(o)}">${escapeHtml(o)}</option>`).join("")}
-            </select>
-          </div>
-        `).join("")}
-        <div class="row">
-          <button class="btn secondary ${isLocked("ex3") ? "locked" : ""}" id="check_ex3">Check</button>
-          <span id="msg_ex3" class="small"></span>
+
+        <div class="card">
+          <span class="smallTag">Grammar</span>
+          <h3>${lesson.grammar?.title || "Grammar rule"}</h3>
+          <div><b>Rule (EN)</b><br>${(lesson.grammar?.enRule || "").replace(/\n/g,"<br>")}</div>
+          <br>
+          <div><b>Объяснение (RU)</b><br>${(lesson.grammar?.ruRule || "").replace(/\n/g,"<br>")}</div>
+          ${lesson.grammar?.formula ? `<br><div><b>Formula</b><br>${lesson.grammar.formula.replace(/\n/g,"<br>")}</div>` : ""}
         </div>
-      </div>
-    ` : "";
 
-    // Build
-    const buildHtml = ex4 ? `
-      <div class="card" style="margin-top:12px">
-        <div class="row" style="justify-content:space-between">
-          <b>${escapeHtml(ex4.title)}</b>
-          <span class="small">${isLocked("ex4") ? "LOCKED" : "1 TRY"}</span>
+        <div class="card">
+          <span class="smallTag">Reading</span>
+          <h3>${lesson.reading?.title || "Reading"}</h3>
+          <div>${(lesson.reading?.text || "").replace(/\n/g,"<br>")}</div>
+          ${readingTasks ? `<br><div><b>Tasks</b></div>${readingTasks}` : ""}
         </div>
-        <div class="hr"></div>
-        ${ex4.items.map((it, idx) => `
-          <div class="msg" style="margin:10px 0">
-            <b>${idx + 1})</b> ${escapeHtml(it.words.join(" / "))}
-            <input class="input" data-build="${idx}" placeholder="Write the sentence" ${isLocked("ex4") ? "disabled" : ""} style="margin-top:8px"/>
-          </div>
-        `).join("")}
-        <div class="row">
-          <button class="btn secondary ${isLocked("ex4") ? "locked" : ""}" id="check_ex4">Check</button>
-          <span id="msg_ex4" class="small"></span>
+
+        <div class="card">
+          <span class="smallTag">Dialogue</span>
+          <h3>${lesson.dialogue?.title || "Dialogue"}</h3>
+          <div style="white-space:pre-wrap;font-weight:800">${lesson.dialogue?.model || ""}</div>
+          ${lesson.dialogue?.roleplay ? `<div class="note">${lesson.dialogue.roleplay}</div>` : ""}
         </div>
-      </div>
-    ` : "";
 
-    if (!matchHtml && !missingHtml && !chooseHtml && !buildHtml) {
-      return `<div class="msg">No exercises yet</div>`;
-    }
-
-    return `${matchHtml}${missingHtml}${chooseHtml}${buildHtml}`;
-  }
-
-  // ===== BOTTOM + AI =====
-  function bottomBar() {
-    const isTeacher = state.user?.role === "teacher";
-    return `
-    <div class="bottomBar">
-      <div class="bottomInner">
-        <button class="bItem" id="bStars">⭐ <small>${totalStars()}</small></button>
-        <button class="bItem primary" id="bAI">🧠 <small>AI Bayan</small> · <small>${aiStatusText()}</small></button>
-        ${isTeacher
-          ? `<button class="bItem" id="bJournal">📒 <small>Journal</small></button>`
-          : `<button class="bItem" id="bJournal" disabled style="opacity:.6">📒 <small>Journal</small></button>`
-        }
-      </div>
-    </div>`;
-  }
-
-  function aiModal() {
-    return `
-    <div class="modal" id="aiModal">
-      <div class="modalCard">
-        <div class="modalTop">
-          <b>AI Bayan (1 вопрос в день)</b>
-          <button class="btn secondary" id="aiClose">✕</button>
+        <div class="card">
+          <span class="smallTag">Exercises</span>
+          <h3>Choose</h3>
+          <div class="grid2">${exButtons || "<div class='note'>No exercises</div>"}</div>
+          <div class="note">1 attempt per exercise.</div>
         </div>
-        <div class="small" style="margin:8px 0">Задай вопрос по теме урока.</div>
-        <div class="chatBox">
-          <textarea id="aiQ" class="input" placeholder="Explain this grammar in RU + formula + examples"></textarea>
-          <button id="btnAI" class="btn">Ask</button>
-        </div>
-        <div id="aiLog" class="chatLog" style="${state.aiLog ? "" : "display:none"}">${escapeHtml(state.aiLog)}</div>
-      </div>
-    </div>`;
-  }
 
-  // ===== BIND =====
-  function bind() {
-    if (state.screen === "login") {
-      $("#btnLogin")?.addEventListener("click", doLogin);
-      $("#pin")?.addEventListener("keydown", (e) => { if (e.key === "Enter") doLogin(); });
-    }
-
-    if (state.screen === "menu") {
-      $("#btnLogout")?.addEventListener("click", logout);
-      document.querySelectorAll("[data-open-module]").forEach(btn => {
-        btn.addEventListener("click", () => {
-          state.activeModule = btn.getAttribute("data-open-module");
-          state.screen = "module";
-          save(); render();
-        });
-      });
-    }
-
-    if (state.screen === "teacher") {
-      $("#btnBackMenu")?.addEventListener("click", () => { state.screen = "menu"; save(); render(); });
-    }
-
-    if (state.screen === "module") {
-      $("#btnBack")?.addEventListener("click", () => { state.screen = "menu"; save(); render(); });
-      document.querySelectorAll("[data-lesson]").forEach(btn => {
-        btn.addEventListener("click", () => {
-          state.activeLessonKey = btn.getAttribute("data-lesson");
-          state.activeTab = "vocab";
-          state.screen = "lesson";
-          save(); render();
-        });
-      });
-    }
-
-    if (state.screen === "lesson") {
-      $("#btnBackToMenu")?.addEventListener("click", () => { state.screen = "menu"; save(); render(); });
-      $("#btnBackToModule")?.addEventListener("click", () => { state.screen = "module"; save(); render(); });
-
-      $("#btnOpenBook")?.addEventListener("click", openBookPage);
-      $("#btnPrint")?.addEventListener("click", doPrint);
-
-      document.querySelectorAll("[data-tab]").forEach(b => {
-        b.addEventListener("click", () => {
-          state.activeTab = b.getAttribute("data-tab");
-          save(); render();
-        });
-      });
-
-      $("#check_ex1")?.addEventListener("click", checkMatch);
-      $("#check_ex2")?.addEventListener("click", checkMissing);
-      $("#check_ex3")?.addEventListener("click", checkChoose);
-      $("#check_ex4")?.addEventListener("click", checkBuild);
-    }
-
-    // bottom bar
-    $("#bAI")?.addEventListener("click", () => { $("#aiModal")?.classList.add("show"); });
-    $("#aiClose")?.addEventListener("click", () => { $("#aiModal")?.classList.remove("show"); });
-    $("#bJournal")?.addEventListener("click", () => {
-      if (state.user?.role === "teacher") { state.screen = "teacher"; save(); render(); }
-    });
-    $("#bStars")?.addEventListener("click", () => alert(`⭐ Stars: ${totalStars()}`));
-
-    $("#btnAI")?.addEventListener("click", askAI);
-  }
-
-  // ===== ACTIONS =====
-  function doLogin() {
-    const login = ($("#login").value || "").trim();
-    const pin = ($("#pin").value || "").trim();
-    const msg = $("#loginMsg");
-
-    if (login === TEACHER_LOGIN && pin === TEACHER_PIN) {
-      state.user = { role: "teacher", login };
-      state.screen = "menu";
-      save(); render(); return;
-    }
-
-    if (studentLogins.includes(login) && pin === STUDENT_PIN) {
-      state.user = { role: "student", login };
-      state.screen = "menu";
-      save(); render(); return;
-    }
-
-    msg.innerHTML = `<span class="bad">Неверный логин или PIN</span>`;
-  }
-
-  function logout() {
-    state.user = null;
-    state.screen = "login";
-    state.activeModule = null;
-    state.activeLessonKey = null;
-    save(); render();
-  }
-
-  function askAI() {
-    if (!state.user) { alert("Сначала войди"); return; }
-    const q = ($("#aiQ").value || "").trim();
-    if (!q) { alert("Напиши вопрос"); return; }
-
-    if (state.user.role === "student") {
-      const k = aiKey();
-      const last = state.ai[k] || "";
-      if (last === todayStr()) { alert("Сегодня лимит AI: 1 вопрос. Завтра снова ✅"); return; }
-      state.ai[k] = todayStr();
-      save();
-    }
-
-    state.aiLog =
-`AI Bayan (demo):
-• I can explain in RU + formula + examples ✅
-
-Q: ${q}`;
-    save(); render();
-    $("#aiModal")?.classList.add("show");
-  }
-
-  function openBookPage() {
-    const key = state.activeLessonKey;
-    const c = window.APP_DATA.lessonContent[key];
-    const p = Number(c?.bookPage || 1);
-    const pdf = window.APP_DATA.bookPdf || "Excel-7.pdf";
-    window.open(`${pdf}#page=${p}`, "_blank");
-  }
-
-  function doPrint() {
-    const key = state.activeLessonKey;
-    const c = window.APP_DATA.lessonContent[key];
-    const title = c?.title || "Lesson";
-    const vocab = c?.vocab?.map(w => `${w.en} — ${w.ru}`).join("\n") || "";
-    const g = c?.grammar || {};
-
-    const html = `
-      <div class="printSheet">
-        <div class="watermark">AI BAYAN · EXCEL 7</div>
-        <h2>${escapeHtml(title)}</h2>
-        <p><b>Student:</b> ${escapeHtml(state.user?.login || "")}</p>
-        <hr/>
-        <h3>Vocabulary</h3>
-        <pre style="white-space:pre-wrap;font-size:14px">${escapeHtml(vocab)}</pre>
-        <hr/>
-        <h3>Grammar</h3>
-        <p><b>${escapeHtml(g.title || "")}</b></p>
-        <pre style="white-space:pre-wrap;font-size:14px">${escapeHtml((g.enRule || "") + "\n\n" + (g.ruRule || "") + "\n\nFORMULA:\n" + (g.formula || ""))}</pre>
       </div>
     `;
 
-    const w = window.open("", "_blank");
-    w.document.write(`<!doctype html><html><head><meta charset="utf-8"><title>Print</title>
-      <link rel="stylesheet" href="styles.css">
-    </head><body>${html}</body></html>`);
-    w.document.close();
-    w.focus();
-    w.print();
+    $("#backModule").onclick = ()=> openModule(mod);
+    $("#backMain").onclick = renderModules;
+    $("#openPdf").onclick = () => { window.open(DATA.bookPdf, "_blank"); };
+
+    document.querySelectorAll(".exBtn").forEach(b=>{
+      b.addEventListener("click", ()=>{
+        const exId = b.dataset.ex;
+        if(isLocked(mod.id, lessonNo, exId)) return; // заблокировано
+        openExercise(mod, lessonNo, exId);
+      });
+    });
   }
 
-  // ===== CHECKS (1 try) =====
-  function currentModuleId() {
-    return state.activeLessonKey ? state.activeLessonKey.split("|")[0] : state.activeModule;
+  function openExercise(mod, lessonNo, exId){
+    state.screen = "exercise";
+    state.currentExerciseId = exId;
+
+    const shades = applyThemeByHex(mod.color);
+    const lessonKey = `${mod.id}|${lessonNo}`;
+    const lesson = DATA.lessonContent[lessonKey];
+    const ex = (lesson.exercises || []).find(x=>x.id === exId);
+    if(!ex){
+      openLesson(mod, lessonNo);
+      return;
+    }
+
+    const locked = isLocked(mod.id, lessonNo, exId);
+
+    // build items by type
+    let items = ex.items || [];
+    if(ex.type === "match"){
+      const pairs = pickVocabPairs(lesson.vocab || [], ex.pairsCount || 6);
+      items = pairs.map((p,i)=>({ q: p.en, a: p.ru, id:`m${i}` }));
+    }
+
+    const heroBg = `linear-gradient(135deg, ${shades[6]}, ${shades[4]})`;
+    const primaryBg = `linear-gradient(135deg, ${shades[7]}, ${shades[5]})`;
+
+    const listHTML = items.map((it, idx)=>{
+      if(ex.type === "choose"){
+        const opts = (it.opts || []).map(o=>`<option value="${escapeHtml(o)}">${escapeHtml(o)}</option>`).join("");
+        return `
+          <div class="qCard">
+            <div class="qText">${idx+1}. ${escapeHtml(it.q)}</div>
+            <select class="select" data-i="${idx}">
+              <option value="">Select…</option>
+              ${opts}
+            </select>
+            <div class="note" id="res_${idx}"></div>
+          </div>
+        `;
+      }
+      // missing / build / match => input
+      return `
+        <div class="qCard">
+          <div class="qText">${idx+1}. ${escapeHtml(it.q || it.words?.join(" ") || "")}</div>
+          <input class="input" data-i="${idx}" placeholder="Answer…" />
+          <div class="note" id="res_${idx}"></div>
+        </div>
+      `;
+    }).join("");
+
+    $("#app").innerHTML = `
+      ${headerHTML(mod.title)}
+      <div class="container">
+        <div class="toolbar">
+          <button class="pill" id="backLesson">⬅ Lesson</button>
+          <button class="pill" id="backModule">⬅ Module</button>
+          <button class="pill" id="backMain">⬅ Main</button>
+        </div>
+
+        <div class="hero" style="background:${heroBg}">
+          <div>
+            <h2>${ex.title}</h2>
+            <p>${lesson.title}</p>
+          </div>
+          <img class="heroImg" src="logo.png" alt="logo">
+        </div>
+
+        <div class="card">
+          <span class="smallTag">${items.length} items</span>
+          <h3>${ex.type.toUpperCase()}</h3>
+          ${locked ? `<div class="bad">Locked (1 attempt used)</div>` : `<div class="note">One attempt</div>`}
+        </div>
+
+        ${listHTML}
+
+        <div class="row3">
+          <button class="btn primary" id="checkBtn" style="background:${primaryBg}">Check</button>
+          <button class="btn" id="printBtn">Print</button>
+          <button class="btn" id="menuBtn">Back to lesson</button>
+        </div>
+
+        <div class="note">⭐ Total stars: ${state.stars}</div>
+      </div>
+    `;
+
+    $("#backLesson").onclick = ()=> openLesson(mod, lessonNo);
+    $("#backModule").onclick = ()=> openModule(mod);
+    $("#backMain").onclick = renderModules;
+    $("#menuBtn").onclick = ()=> openLesson(mod, lessonNo);
+
+    $("#printBtn").onclick = () => {
+      // watermark for print
+      const wm = document.createElement("div");
+      wm.className = "printWatermark";
+      wm.textContent = "AI BAYAN · Excel 7";
+      document.body.appendChild(wm);
+      window.print();
+      wm.remove();
+    };
+
+    const checkBtn = $("#checkBtn");
+    if(locked){
+      checkBtn.disabled = true;
+      checkBtn.style.opacity = .5;
+    }else{
+      checkBtn.onclick = () => {
+        const okCount = checkExercise(ex.type, items, ex, lesson, mod, lessonNo);
+        // ⭐ награда: 1 звезда если >=60% правильных
+        const score = items.length ? okCount / items.length : 0;
+        if(score >= 0.6) addStars(1);
+
+        lockAttempt(mod.id, lessonNo, exId);
+        // перерисовать чтобы заблокировать
+        openLesson(mod, lessonNo);
+      };
+    }
   }
 
-  function checkMatch() {
-    if (isLocked("ex1")) return;
-    const content = window.APP_DATA.lessonContent[state.activeLessonKey];
-    if (!content) return;
-    const ex1 = content.exercises?.find(x => x.id === "ex1");
-    if (!ex1) return;
+  function normalize(s){
+    return (s || "")
+      .toString()
+      .trim()
+      .toLowerCase()
+      .replace(/\s+/g," ");
+  }
 
-    const pairs = (content.vocab || []).slice(0, ex1.pairsCount || 6);
-    let correct = 0;
+  function checkExercise(type, items, ex, lesson, mod, lessonNo){
+    let ok = 0;
 
-    document.querySelectorAll("[data-match]").forEach(sel => {
-      const i = Number(sel.getAttribute("data-match"));
-      const chosen = sel.value;
-      if (chosen && chosen === pairs[i].ru) correct++;
+    items.forEach((it, idx)=>{
+      const resEl = document.getElementById(`res_${idx}`);
+      let user = "";
+
+      if(type === "choose"){
+        const sel = document.querySelector(`select[data-i="${idx}"]`);
+        user = sel ? sel.value : "";
+      }else{
+        const inp = document.querySelector(`input[data-i="${idx}"]`);
+        user = inp ? inp.value : "";
+      }
+
+      let correct = "";
+
+      if(type === "build"){
+        correct = it.a || "";
+      }else if(type === "match"){
+        correct = it.a || "";
+      }else if(type === "missing"){
+        correct = it.a || "";
+      }else if(type === "choose"){
+        correct = it.a || "";
+      }else{
+        correct = it.a || "";
+      }
+
+      const isOk = normalize(user) === normalize(correct);
+      if(isOk){
+        ok++;
+        if(resEl) resEl.innerHTML = `<span class="ok">✅ Correct</span>`;
+      }else{
+        if(resEl) resEl.innerHTML = `<span class="bad">❌ ${escapeHtml(correct)}</span>`;
+      }
     });
 
-    lockAttempt("ex1");
-    const msg = $("#msg_ex1");
-    if (correct === pairs.length) {
-      msg.innerHTML = `✅ Correct! +1⭐`;
-      addStars(currentModuleId(), 1);
-    } else {
-      msg.innerHTML = `❌ ${correct}/${pairs.length}`;
-    }
-    save(); render();
+    return ok;
   }
 
-  function checkMissing() {
-    if (isLocked("ex2")) return;
-    const content = window.APP_DATA.lessonContent[state.activeLessonKey];
-    const ex = content?.exercises?.find(x => x.id === "ex2");
-    if (!ex) return;
-
-    let correct = 0;
-    document.querySelectorAll("[data-miss]").forEach(inp => {
-      const i = Number(inp.getAttribute("data-miss"));
-      const ans = (inp.value || "").trim().toLowerCase();
-      if (ans && ans === String(ex.items[i].a).toLowerCase()) correct++;
-    });
-
-    lockAttempt("ex2");
-    const msg = $("#msg_ex2");
-    if (correct === ex.items.length) {
-      msg.innerHTML = `✅ Perfect! +1⭐`;
-      addStars(currentModuleId(), 1);
-    } else {
-      msg.innerHTML = `❌ ${correct}/${ex.items.length}`;
-    }
-    save(); render();
+  function escapeHtml(s){
+    return (s ?? "").toString()
+      .replace(/&/g,"&amp;")
+      .replace(/</g,"&lt;")
+      .replace(/>/g,"&gt;")
+      .replace(/"/g,"&quot;");
   }
 
-  function checkChoose() {
-    if (isLocked("ex3")) return;
-    const content = window.APP_DATA.lessonContent[state.activeLessonKey];
-    const ex = content?.exercises?.find(x => x.id === "ex3");
-    if (!ex) return;
-
-    let correct = 0;
-    document.querySelectorAll("[data-choose]").forEach(sel => {
-      const i = Number(sel.getAttribute("data-choose"));
-      if (sel.value && sel.value === ex.items[i].a) correct++;
-    });
-
-    lockAttempt("ex3");
-    const msg = $("#msg_ex3");
-    if (correct === ex.items.length) {
-      msg.innerHTML = `✅ Great! +1⭐`;
-      addStars(currentModuleId(), 1);
-    } else {
-      msg.innerHTML = `❌ ${correct}/${ex.items.length}`;
-    }
-    save(); render();
-  }
-
-  function norm(s) { return (s || "").trim().replace(/\s+/g, " ").toLowerCase(); }
-
-  function checkBuild() {
-    if (isLocked("ex4")) return;
-    const content = window.APP_DATA.lessonContent[state.activeLessonKey];
-    const ex = content?.exercises?.find(x => x.id === "ex4");
-    if (!ex) return;
-
-    let correct = 0;
-    document.querySelectorAll("[data-build]").forEach(inp => {
-      const i = Number(inp.getAttribute("data-build"));
-      if (norm(inp.value) === norm(ex.items[i].a)) correct++;
-    });
-
-    lockAttempt("ex4");
-    const msg = $("#msg_ex4");
-    if (correct === ex.items.length) {
-      msg.innerHTML = `✅ Excellent! +1⭐`;
-      addStars(currentModuleId(), 1);
-    } else {
-      msg.innerHTML = `❌ ${correct}/${ex.items.length}`;
-    }
-    save(); render();
-  }
-
-  // ===== ESCAPE =====
-  function escapeHtml(s) {
-    return String(s).replace(/[&<>"']/g, m => ({
-      "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"
-    }[m]));
-  }
-  function escapeAttr(s) { return escapeHtml(s); }
-
-  render();
+  // старт
+  document.addEventListener("DOMContentLoaded", renderModules);
 })();

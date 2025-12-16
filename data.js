@@ -154,14 +154,161 @@ window.APP_DATA = {
   ]
 },
 
-    "m1|3": { title:"Lesson 1b (Part 1) — Grammar", bookPage: 7, note:"Present Simple/Continuous + Plurals." },
-    "m1|4": { title:"Lesson 1b (Part 2) — Comparatives", bookPage: 8, note:"Comparatives/Superlatives + exercises." },
+    "m1|3": {
+  title: "Lesson 1b (Part 1) — Grammar: Present Simple & Plurals",
+  bookPage: 7,
 
-    "m1|5": { title:"Lesson 1c", bookPage: 10, note:"Заполним по книге." },
-    "m1|6": { title:"Lesson 1d", bookPage: 11, note:"Заполним по книге." },
-    "m1|7": { title:"Lesson 1e", bookPage: 12, note:"Заполним по книге." },
-    "m1|8": { title:"Lesson 1f", bookPage: 13, note:"Заполним по книге." },
-    "m1|9": { title:"Lesson 1g", bookPage: 14, note:"Заполним по книге." },
-    "m1|10": { title:"Edutainment", bookPage: 15, note:"Заполним по книге." }
+  grammar1: {
+    title: "Present Simple",
+    enRule:
+      "We use the Present Simple for habits, routines and facts.",
+    ruRule:
+      "Present Simple используется для привычек, регулярных действий и фактов.",
+    formula:
+      "I / You / We / They + V1\nHe / She / It + V(s)"
+  },
+
+  exercise1: {
+    title: "Ex 1 — Choose the correct form",
+    items: [
+      { q:"She ____ dancing after school.", opts:["likes","is liking"], a:"likes" },
+      { q:"They ____ video games every day.", opts:["play","are playing"], a:"play" },
+      { q:"He ____ boxing.", opts:["does","is doing"], a:"does" }
+    ]
+  },
+
+  grammar2: {
+    title: "Plural nouns",
+    enRule:
+      "Most nouns add -s or -es. Some nouns are irregular.",
+    ruRule:
+      "Во множественном числе обычно добавляется -s/-es. Есть неправильные формы.",
+    formula:
+      "book → books\nwatch → watches\nchild → children\nperson → people"
+  },
+
+  exercise2: {
+    title: "Ex 2 — Write the plural form",
+    items: ["child","person","hobby","watch","activity"]
   }
+},
+
+    "m1|4": {
+  title: "Lesson 1b (Part 2) — Comparatives",
+  bookPage: 8,
+
+  grammar: {
+    title: "Comparatives",
+    enRule:
+      "We use comparatives to compare two things.",
+    ruRule:
+      "Сравнительная степень используется для сравнения двух предметов.",
+    formula:
+      "short adjective + -er\nlong adjective → more + adjective"
+  },
+
+  exercise1: {
+    title: "Ex 1 — Choose the correct form",
+    items: [
+      { q:"Boxing is ____ than yoga.", opts:["more dangerous","dangerous"], a:"more dangerous" },
+      { q:"Dancing is ____ than boxing.", opts:["easier","easy"], a:"easier" },
+      { q:"Online games are ____ than board games.", opts:["more exciting","exciting"], a:"more exciting" }
+    ]
+  }
+},
+
+   "m1|5": {
+  title: "Lesson 1c — Listening & Speaking",
+  bookPage: 10,
+
+  listening: {
+    title: "Listen and choose",
+    note: "Students listen to teenagers talking about hobbies."
+  },
+
+  speaking: {
+    title: "Speaking",
+    prompts: [
+      "What is your favourite hobby?",
+      "How often do you do it?",
+      "Why do you like it?"
+    ]
+  }
+},
+ 
+   "m1|6": {
+  title: "Lesson 1d — Skills: Traditional hobbies",
+  bookPage: 11,
+
+  reading: {
+    title: "Reading",
+    text:
+      "Some hobbies are part of national culture. In Kazakhstan people enjoy traditional activities such as horse riding and making national costumes."
+  },
+
+  exercise: {
+    title: "True / False",
+    items: [
+      { q:"Traditional hobbies are part of culture.", a:true },
+      { q:"Only teenagers have hobbies.", a:false }
+    ]
+  }
+},
+
+  "m1|7": {
+  title: "Lesson 1e — Everyday English",
+  bookPage: 12,
+
+  phrases: [
+    "What do you do in your free time?",
+    "I’m keen on…",
+    "I’m not interested in…",
+    "It’s really fun!"
+  ],
+
+  exercise: {
+    title: "Make a dialogue",
+    note: "Use the phrases to talk about hobbies."
+  }
+},
+ 
+    "m1|8": {
+  title: "Lesson 1f — Writing",
+  bookPage: 13,
+
+  task: {
+    title: "Write about your hobby",
+    plan: [
+      "What is your hobby?",
+      "How often do you do it?",
+      "Why do you like it?"
+    ]
+  }
+},
+
+    "m1|9": {
+  title: "Lesson 1g — Review",
+  bookPage: 14,
+
+  review: {
+    title: "Check yourself",
+    items: [
+      "Name three hobbies",
+      "Use one comparative",
+      "Make one sentence in Present Simple"
+    ]
+  }
+},
+
+   "m1|10": {
+  title: "Edutainment",
+  bookPage: 15,
+
+  fun: [
+    "Quiz: Guess the hobby",
+    "Mini game: Categorise activities",
+    "Video: Teen hobbies around the world"
+  ]
+}
+
 };

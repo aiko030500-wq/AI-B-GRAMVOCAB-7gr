@@ -2,43 +2,6 @@ window.APP_DATA = {
   appTitle: "AI Bayan · Excel 7",
   bookPdf: "Excel-7.pdf",
 
-  function LSKEY(suffix){
-  const u = STATE.user?.login || "guest";
-  return `AIB_EX7_${u}_${suffix}`;
-}
-
-function getJSON(key, fallback){
-  try { return JSON.parse(localStorage.getItem(key)) ?? fallback; } catch { return fallback; }
-}
-function setJSON(key, val){ localStorage.setItem(key, JSON.stringify(val)); }
-
-function getStars(){
-  return Number(localStorage.getItem(LSKEY("stars")) || 0);
-}
-function addStar(n=1){
-  const v = getStars() + n;
-  localStorage.setItem(LSKEY("stars"), String(v));
-  const el = document.getElementById("starsCounter");
-  if (el) el.textContent = `⭐ ${v}`;
-}
-
-function attemptKey(lessonKey, exId){
-  return LSKEY(`attempt_${lessonKey}_${exId}`);
-}
-function isLocked(lessonKey, exId){
-  return localStorage.getItem(attemptKey(lessonKey, exId)) === "1";
-}
-function lock(lessonKey, exId){
-  localStorage.setItem(attemptKey(lessonKey, exId), "1");
-}
-
-function markResult(outEl, ok){
-  if (!outEl) return;
-  outEl.innerHTML = ok
-    ? `<span class="ok">✅</span>`
-    : `<span class="no">❌</span>`;
-}
-
   // ВХОД
   auth: {
     studentPin: "2844",

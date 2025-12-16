@@ -1,247 +1,385 @@
-:root{
-  --pageBg:#eefaf4;
-  --cardBg: rgba(255,255,255,.92);
-  --ink:#0b1b16;
-
-  /* print watermark color set by JS */
-  --wmColor: rgba(0,0,0,.25);
+/* =========================
+   BASE
+========================= */
+* {
+  box-sizing: border-box;
 }
 
-*{box-sizing:border-box}
-
-body{
-  margin:0;
-  font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial;
-  background: linear-gradient(180deg, var(--pageBg), #ffffff);
-  color:var(--ink);
+html, body {
+  margin: 0;
+  padding: 0;
+  background: var(--pageBg, #f3f4f6);
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+  color: #111827;
 }
 
-/* layout */
-.wrap{max-width:680px;margin:0 auto;padding:14px 14px 28px}
-.grid{display:grid;gap:12px;margin-top:14px}
-.line{height:1px;background:rgba(0,0,0,.08);margin:12px 0}
-
-.title{font-weight:900;font-size:16px}
-.muted{opacity:.7;font-size:12px;margin-top:6px}
-.small{font-size:12px;opacity:.75}
-
-.ok{color:#0aa35f;font-weight:900}
-.no{color:#ff3b30;font-weight:900}
-
-/* top bar */
-.top{
-  border-radius:22px;
-  padding:16px 16px;
-  color:#fff;
-  box-shadow:0 12px 30px rgba(0,0,0,.10);
-}
-.topRow{display:flex;align-items:center;gap:12px}
-.logoImg{
-  width:46px;height:46px;border-radius:50%;
-  object-fit:cover;
-  border:3px solid rgba(255,255,255,.65);
-  background:rgba(255,255,255,.25);
-}
-.h1{font-weight:900;font-size:18px}
-.sub{opacity:.9;margin-top:4px;font-size:13px}
-
-/* cards */
-.card{
-  border-radius:18px;
-  padding:14px;
-  background:var(--cardBg);
-  box-shadow:0 10px 22px rgba(0,0,0,.06);
-  border:3px solid rgba(0,0,0,.06);
+button {
+  font-family: inherit;
+  cursor: pointer;
 }
 
-/* buttons */
-.btnRow{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
-.btn{
-  border:0;border-radius:14px;padding:12px 14px;
-  font-weight:900; cursor:pointer;
-}
-.btnGhost{
-  background:transparent;
-  border:2px solid rgba(11,27,22,.18);
-  color:var(--ink);
-}
-.btnPrimary{color:#fff}
-
-/* module/lesson cards */
-.lessonCard{
-  border-radius:18px;
-  padding:14px;
-  background:var(--cardBg);
-  box-shadow:0 10px 22px rgba(0,0,0,.06);
-  border:3px solid transparent;
-  text-align:left;
-  cursor:pointer;
-}
-.lessonTop{display:flex;justify-content:space-between;gap:10px;align-items:flex-start}
-.badge{
-  font-size:12px;font-weight:900;
-  padding:6px 10px;border-radius:999px;
-  background:rgba(11,27,22,.06);
+input {
+  font-family: inherit;
 }
 
-/* sticky bottom bar (chat) */
-.bottomBar{
-  position: sticky;
-  bottom: 10px;
-  margin-top: 14px;
-  display:flex;
-  gap:10px;
+/* =========================
+   TOP BAR
+========================= */
+.top {
+  padding: 14px 16px;
+  color: #fff;
+}
+
+.topRow {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.logoImg {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+}
+
+.h1 {
+  font-size: 18px;
+  font-weight: 800;
+}
+
+.sub {
+  font-size: 12px;
+  opacity: 0.9;
+}
+
+.stars {
+  font-weight: 900;
+  background: rgba(255,255,255,.25);
+  padding: 6px 10px;
+  border-radius: 12px;
+}
+
+/* =========================
+   LAYOUT
+========================= */
+.wrap {
+  padding: 16px;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 14px;
+  margin-top: 16px;
+}
+
+.card {
+  background: #fff;
+  border-radius: 16px;
+  padding: 14px;
+  box-shadow: 0 10px 25px rgba(0,0,0,.08);
+}
+
+.line {
+  height: 1px;
+  background: #e5e7eb;
+  margin: 10px 0;
+}
+
+.title {
+  font-weight: 800;
+  font-size: 15px;
+}
+
+.muted {
+  font-size: 13px;
+  color: #6b7280;
+}
+
+.small {
+  font-size: 13px;
+}
+
+/* =========================
+   LOGIN
+========================= */
+.loginCard {
+  max-width: 380px;
+  margin: 24px auto;
+  background: #fff;
+  border-radius: 18px;
+  padding: 18px;
+  box-shadow: 0 12px 30px rgba(0,0,0,.12);
+}
+
+.label {
+  font-size: 13px;
+  margin-top: 12px;
+  color: #374151;
+}
+
+.input {
+  width: 100%;
+  padding: 10px 12px;
+  border-radius: 12px;
+  border: 1px solid #d1d5db;
+  margin-top: 6px;
+  font-size: 14px;
+}
+
+.input:disabled {
+  background: #f3f4f6;
+}
+
+/* =========================
+   BUTTONS
+========================= */
+.btnRow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.btn {
+  padding: 8px 14px;
+  border-radius: 12px;
+  border: none;
+  font-size: 14px;
+}
+
+.btnPrimary {
+  background: #16a34a;
+  color: #fff;
+  font-weight: 700;
+}
+
+.btnGhost {
+  background: #f3f4f6;
+  color: #111827;
+  font-weight: 600;
+}
+
+.btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* =========================
+   LESSON / MODULE CARDS
+========================= */
+.lessonCard {
+  background: #fff;
+  border-radius: 16px;
+  padding: 14px;
+  border: 2px solid transparent;
+  text-align: left;
+  box-shadow: 0 10px 25px rgba(0,0,0,.08);
+}
+
+.lessonTop {
+  display: flex;
   justify-content: space-between;
-  align-items:center;
-}
-.bottomBtn{
-  flex:1;
-  border-radius:18px;
-  padding:14px 14px;
-  font-weight:900;
-  border:0;
-  cursor:pointer;
-  box-shadow:0 12px 26px rgba(0,0,0,.10);
+  gap: 10px;
 }
 
-/* login */
-.loginCard{
-  border-radius:22px;
-  padding:16px;
-  background:rgba(255,255,255,.92);
-  box-shadow:0 14px 30px rgba(0,0,0,.10);
-  border:3px solid rgba(0,0,0,.06);
-  margin-top:14px;
-}
-.label{font-weight:900;margin:10px 0 6px}
-
-/* inputs */
-.input{
-  width:100%;
-  border-radius:14px;
-  border:2px solid rgba(0,0,0,.12);
-  padding:12px 12px;
-  font-size:14px;
-  background:rgba(255,255,255,.92);
+.badge {
+  font-size: 12px;
+  background: #e5e7eb;
+  padding: 4px 8px;
+  border-radius: 999px;
+  font-weight: 700;
 }
 
-/* vocabulary cards */
-.vgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-top:10px}
-.vcard{
-  background:rgba(255,255,255,.92);
-  border-radius:16px;
-  padding:10px;
-  border:2px solid rgba(0,0,0,.06);
-}
-.vemojiRow{display:flex;justify-content:space-between;align-items:center;gap:10px}
-.vemoji{font-size:24px}
-.vplay{
-  border:0;
-  background:rgba(0,0,0,.06);
-  border-radius:12px;
-  padding:8px 10px;
-  font-weight:900;
-  cursor:pointer;
-}
-.ven{font-weight:900;margin-top:6px}
-.vru{opacity:.75;font-size:12px;margin-top:2px}
-
-/* categorise exercise */
-.catGrid{display:grid;gap:10px;margin-top:10px}
-.catBox{
-  border-radius:16px;padding:10px;
-  border:2px dashed rgba(0,0,0,.18);
-  background:rgba(255,255,255,.55);
-}
-.catTitle{font-weight:900;margin-bottom:8px}
-.pillRow{display:flex;gap:8px;flex-wrap:wrap}
-.pill{
-  border-radius:999px;padding:8px 10px;
-  background:rgba(0,0,0,.06);
-  border:1px solid rgba(0,0,0,.10);
-  font-weight:900;
-  cursor:pointer;
-}
-.pill.selected{outline:3px solid rgba(0,0,0,.12)}
-
-/* error/pre blocks (optional) */
-.pre{
-  white-space:pre-wrap;
-  background:#0b1b16;
-  color:#d6ffe9;
-  padding:10px;
-  border-radius:12px;
-  overflow:auto;
-  font-size:12px;
+/* =========================
+   PROGRESS
+========================= */
+.metaRow {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-top: 8px;
 }
 
-/* ========= PRINT (Watermark + Footer) ========= */
-/* these layers exist in DOM (created by JS) */
-#printWatermark, #printFooter{ display:none; }
+.chip {
+  font-size: 12px;
+  padding: 4px 8px;
+  border-radius: 999px;
+  border: 1px solid rgba(0,0,0,.12);
+  background: rgba(255,255,255,.6);
+}
 
+.okChip {
+  border-color: rgba(22,163,74,.4);
+}
+
+.noChip {
+  border-color: rgba(239,68,68,.4);
+}
+
+/* =========================
+   VOCABULARY
+========================= */
+.vgrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  gap: 10px;
+}
+
+.vcard {
+  border-radius: 14px;
+  border: 1px solid #e5e7eb;
+  padding: 10px;
+  text-align: center;
+}
+
+.vemojiRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.vemoji {
+  font-size: 22px;
+}
+
+.vplay {
+  border: none;
+  background: #f3f4f6;
+  border-radius: 10px;
+  padding: 4px 8px;
+}
+
+.ven {
+  font-weight: 700;
+  margin-top: 6px;
+}
+
+.vru {
+  font-size: 13px;
+  color: #6b7280;
+}
+
+/* =========================
+   PILLS / OPTIONS
+========================= */
+.pillRow {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.pill {
+  padding: 6px 10px;
+  border-radius: 999px;
+  background: #f3f4f6;
+  font-size: 13px;
+  border: 1px solid #d1d5db;
+}
+
+.pill.selected {
+  background: #bbf7d0;
+  border-color: #22c55e;
+}
+
+/* =========================
+   CATEGORISE
+========================= */
+.catGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 10px;
+}
+
+.catBox {
+  border: 1px dashed #d1d5db;
+  border-radius: 14px;
+  padding: 10px;
+}
+
+.catTitle {
+  font-weight: 700;
+  margin-bottom: 6px;
+}
+
+/* =========================
+   READING
+========================= */
+.readingText {
+  font-size: 15px;
+  line-height: 1.55;
+}
+
+/* =========================
+   TRUE / FALSE, CHECKS
+========================= */
+.ok {
+  color: #16a34a;
+  font-weight: 900;
+}
+
+.no {
+  color: #ef4444;
+  font-weight: 900;
+}
+
+/* =========================
+   STAR ANIMATION ⭐
+========================= */
+.starFx {
+  position: fixed;
+  transform: translate(-50%, -50%);
+  font-size: 18px;
+  pointer-events: none;
+  animation: starPop .6s ease-out forwards;
+  z-index: 9999;
+  filter: drop-shadow(0 6px 10px rgba(0,0,0,.15));
+}
+
+@keyframes starPop {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(.6);
+  }
+  15% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(
+      calc(-50% + var(--dx)),
+      calc(-50% + var(--dy))
+    ) scale(.9);
+  }
+}
+
+/* =========================
+   BOTTOM BAR
+========================= */
+.bottomBar {
+  position: sticky;
+  bottom: 0;
+  margin-top: 20px;
+}
+
+.bottomBtn {
+  width: 100%;
+  padding: 12px;
+  border-radius: 14px;
+  border: none;
+  font-size: 15px;
+  font-weight: 700;
+}
+
+/* =========================
+   PRINT
+========================= */
 @media print {
-  body{ background:#fff !important; }
-
-  /* hide UI controls */
-  .top, .btnRow, .bottomBar { display:none !important; }
-
-  .wrap{ max-width:100% !important; padding:0 !important; }
-  .card, .lessonCard{ box-shadow:none !important; border:none !important; }
-
-  /* watermark wrapper */
-  #printWatermark{
-    display:block !important;
-    position: fixed;
-    inset: 0;
-    z-index: 9999;
-    pointer-events:none;
+  body {
+    background: #fff;
   }
-
-  #printWatermark .wmWrap{
-    position:absolute;
-    top: 38%;
-    left: 8%;
-    transform: rotate(-25deg);
-    display:flex;
-    align-items:center;
-    gap:18px;
-    opacity: .10;
+  .btn, .bottomBar {
+    display: none !important;
   }
-
-  #printWatermark img{
-    width: 120px;
-    height: 120px;
-    border-radius: 50%;
-    object-fit: cover;
-  }
-
-  #printWatermark .wmText{
-    font-size: 52px;
-    font-weight: 900;
-    letter-spacing: 1px;
-    color: var(--wmColor, rgba(0,0,0,.25));
-    white-space: nowrap;
-  }
-
-  /* footer */
-  #printFooter{
-    display:block !important;
-    position: fixed;
-    left: 18px;
-    right: 18px;
-    bottom: 12px;
-    z-index: 9998;
-    font-size: 11px;
-    color: rgba(0,0,0,.65);
-    border-top: 1px solid rgba(0,0,0,.15);
-    padding-top: 6px;
-  }
-
-  #printFooter .row{
-    display:flex;
-    justify-content: space-between;
-    gap: 10px;
-  }
-
-  @page{ margin: 14mm; }
 }

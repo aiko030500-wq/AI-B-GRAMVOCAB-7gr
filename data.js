@@ -637,5 +637,57 @@ Aslan`
       rewardStars:1
     }
   }
-},
+
+};"m1|8": {
+      title: "Lesson 8 — 1g Writing: An email describing a hobby",
+      bookPage: 15,
+
+      readingA: {
+        title: "Model email",
+        text:
+`Hi Alex,
+I enjoy playing football. I play it after school.
+It is fun and healthy.
+What about you?
+Best wishes,
+Aslan`
+      },
+
+      exercise1: {
+        title: "Ex 1 — True / False",
+        items: [
+          { q:"The email is about a hobby.", a:true }
+        ]
+      },
+
+      exercise2: {
+        title: "Ex 2 — Complete",
+        items: [
+          { q:"The writer enjoys ______ football.", a:"playing" }
+        ]
+      },
+
+      exercise3: {
+        title: "Ex 3 — Answer",
+        items: [
+          { q:"What hobby does the writer have?", a:"football" }
+        ]
+      },
+
+      exercise4: {
+        title: "Ex 4 — Writing",
+        writing: {
+          placeholder:"Write your email here...",
+          plan:[
+            "Greeting",
+            "Your hobby",
+            "How often",
+            "Why you like it",
+            "Closing"
+          ],
+          rewardStars: 1
+        }
+      }
+    }
+  }
 };

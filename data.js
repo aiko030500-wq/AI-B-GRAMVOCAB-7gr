@@ -256,265 +256,385 @@ Her family supports her, but they remind her to take breaks and not sit too long
     // Lesson 3 = Use of English 1b (p8–9)
     // -------------------------
     "m1|3": {
-      title: "Lesson 3 — Use of English 1b",
-      bookPages:[8,9],
-      openBookHint:"Open the PDF and look at pages 8–9 for the theory.",
+  title: "Lesson 3 — 1b Use of English",
+  bookPage: 8,
 
-      exercises: [
-        {
-          id:"ex2",
-          type:"fill_verbs",
-          title:"2) Complete the gaps with Present Simple / Present Continuous",
-          items: [
-            { q:"1 John sometimes (play) golf on Sundays.", a:"plays" },
-            { q:"2 Ann (read) a book in her room now.", a:"is reading" },
-            { q:"3 (you/like) collecting stamps?", a:"Do you like" },
-            { q:"4 Jen and Bill (go) kart racing tonight.", a:"are going" },
-            { q:"5 Suzy’s class (start) at 4 pm.", a:"starts" },
-            { q:"6 Adrian (want) to buy a new pair of sports shoes.", a:"wants" },
-            { q:"7 (you/fly) to New York next month?", a:"Are you flying" }
-          ]
-        },
-        {
-          id:"ex3",
-          type:"fill",
-          title:"3) Put the verbs into Present Simple / Present Continuous (email)",
-          items: [
-            { q:"1 Thanks for your email! I ________ (be) very busy today!", a:"am" },
-            { q:"2 My little brother ________ (have) a fancy dress party for his birthday tomorrow.", a:"has" },
-            { q:"3 So Mum ________ (tidy) the house", a:"is tidying" },
-            { q:"4 and I ________ (make) my brother’s costume.", a:"am making" },
-            { q:"5 He ________ (want) to be a pirate!", a:"wants" },
-            { q:"6 Dad ________ (need) some help in the kitchen.", a:"needs" },
-            { q:"7 My mum ________ (not/like) baking", a:"doesn’t like" },
-            { q:"8 so my dad ________ (make) the cake for the party.", a:"is making" },
-            { q:"9 PS ________ (you/want) to come to the party?", a:"Do you want" }
-          ]
-        },
-        {
-          id:"ex4",
-          type:"mcq",
-          title:"4) Choose is / are",
-          items: [
-            { q:"1 The police ___ on their way.", opts:["is","are"], a:"are" },
-            { q:"2 Physics ___ my favourite school subject.", opts:["is","are"], a:"is" },
-            { q:"3 Your news ___ very interesting.", opts:["is","are"], a:"is" },
-            { q:"4 Your trousers ___ dirty.", opts:["is","are"], a:"are" },
-            { q:"5 Darts ___ my favourite game.", opts:["is","are"], a:"is" },
-            { q:"6 Your glasses ___ on the desk.", opts:["is","are"], a:"are" },
-            { q:"7 Where ___ the money?", opts:["is","are"], a:"is" },
-            { q:"8 The shorts ___ in the washing machine.", opts:["is","are"], a:"are" },
-            { q:"9 Family ___ very precious to me.", opts:["is","are"], a:"is" },
-            { q:"10 There ___ people outside the stadium.", opts:["is","are"], a:"are" }
-          ]
-        },
+  /* ===== GRAMMAR (покажется как текст/заметка) ===== */
+  note: `GRAMMAR
+Present Simple: habits / facts
+Present Continuous: now / temporary / arrangements (plans)
 
-        {
-          id:"ex5",
-          type:"table_fill",
-          title:"5) Comparative / Superlative table (fill the missing)",
-          note:"Only blanks are checked.",
-          items: [
-            { q:"long → (comparative)", a:"longer" },
-            { q:"fat → (comparative)", a:"fatter" },
-            { q:"happy → (comparative)", a:"happier" }
-          ]
-        },
+Form:
+PS: I/you/we/they + V1 | he/she/it + V(s)
+PC: am/is/are + V-ing
 
-        {
-          id:"ex6",
-          type:"fill",
-          title:"6) Fill in the comparative forms",
-          items: [
-            { q:"1 nice → Those football boots are ________ than these ones.", a:"nicer" },
-            { q:"2 sporty → Ann’s much ________ than Mary.", a:"sportier" },
-            { q:"3 hot → Today is ________ than yesterday.", a:"hotter" },
-            { q:"4 cheap → These boxing gloves are ________ than those.", a:"cheaper" },
-            { q:"5 bad → Tom’s dancing is ________ than Mike’s.", a:"worse" },
-            { q:"6 popular → Kelly is ________ than Jill in the team.", a:"more popular" }
-          ]
-        },
+Plurals:
+Most nouns: +s / +es
+Irregular: child→children, person→people
 
-        {
-          id:"ex7",
-          type:"fill",
-          title:"7) Fill in the superlative forms",
-          items: [
-            { q:"1 fast → Usain Bolt is ________ runner in the world.", a:"the fastest" },
-            { q:"2 long → The women of the Padaung tribe have ________ necks in the world.", a:"the longest" },
-            { q:"3 short → The Timorese are ________ people in the world.", a:"the shortest" },
-            { q:"4 healthy → The Spanish are ________ people in the world.", a:"the healthiest" }
-          ]
-        },
+Comparatives:
+short adj + -er / long adj → more + adj
+Irregular: good→better, bad→worse`,
 
-        {
-          id:"ex9",
-          type:"mcq",
-          title:"9) Choose the correct item",
-          items: [
-            { q:"1 This is the ___ shop in the area.", opts:["large","larger","largest"], a:"largest" },
-            { q:"2 These boots are ___ expensive than those ones.", opts:["more","much","most"], a:"more" },
-            { q:"3 Sam is ___ of all to win the competition.", opts:["the cleverest","clever","cleverer"], a:"the cleverest" },
-            { q:"4 Jenny is taller ___ her sister.", opts:["in","of","than"], a:"than" },
-            { q:"5 Jason is ___ than Steve.", opts:["the oldest","older","oldest"], a:"older" },
-            { q:"6 My new flat is ___ smaller than my old one.", opts:["more","most","much"], a:"much" }
-          ]
-        }
-      ]
-    },
+  /* ===== Ex 1 — Present Simple / Continuous (MCQ) ===== */
+  exercise1: {
+    title: "Ex 1 — Choose the correct form",
+    items: [
+      { q:"1 John sometimes ____ golf on Sundays.", opts:["play","plays","is playing"], a:"plays" },
+      { q:"2 Ann ____ a book in her room now.", opts:["reads","is reading","read"], a:"is reading" },
+      { q:"3 ____ you like collecting stamps?", opts:["Do","Are","Does"], a:"Do" },
+      { q:"4 Jen and Bill ____ kart racing tonight.", opts:["go","are going","goes"], a:"are going" },
+      { q:"5 Suzy’s class ____ at 4 pm.", opts:["starts","is starting","start"], a:"starts" },
+      { q:"6 Adrian ____ to buy new sports shoes.", opts:["want","wants","is wanting"], a:"wants" },
+      { q:"7 ____ you flying to New York next month?", opts:["Do","Are","Does"], a:"Are" }
+    ]
+  },
+
+  /* ===== Ex 2 — Plurals (autocheck input) ===== */
+  complete: {
+    title: "Ex 2 — Write the plural form",
+    items: [
+      { q:"child → ________", a:"children" },
+      { q:"person → ________", a:"people" },
+      { q:"hobby → ________", a:"hobbies" },
+      { q:"watch → ________", a:"watches" },
+      { q:"activity → ________", a:"activities" }
+    ]
+  },
+
+  /* ===== Ex 3 — Comparatives (autocheck) ===== */
+  exercise3: {
+    title: "Ex 3 — Write the comparative form",
+    items: [
+      { q:"nice → ________", a:"nicer" },
+      { q:"sporty → ________", a:"sportier" },
+      { q:"hot → ________", a:"hotter" },
+      { q:"cheap → ________", a:"cheaper" },
+      { q:"bad → ________", a:"worse" },
+      { q:"popular → ________", a:"more popular" }
+    ]
+  },
+
+  /* ===== Ex 4 — Use comparatives in sentences (MCQ) ===== */
+  exercise4: {
+    title: "Ex 4 — Choose the correct sentence",
+    items: [
+      { q:"1", opts:["Boxing is more dangerous than yoga.","Boxing is danger than yoga."], a:"Boxing is more dangerous than yoga." },
+      { q:"2", opts:["Dancing is easier than boxing.","Dancing is easy than boxing."], a:"Dancing is easier than boxing." },
+      { q:"3", opts:["Online games are more exciting than board games.","Online games are excitinger than board games."], a:"Online games are more exciting than board games." }
+    ]
+  },
+
+  /* ===== Ex 5 — Speaking (без автопроверки) ===== */
+  speaking: {
+    title: "Ex 5 — Speak",
+    prompts: [
+      "Tell your partner about your hobby.",
+      "Use: I usually… / I’m …ing now / I’m …ing on Saturday.",
+      "Compare two hobbies using: … is (more) … than …"
+    ]
+  },
+
+  /* ===== Ex 6 — Mini Writing (⭐ 1 раз) ===== */
+  exercise6: {
+    title: "Ex 6 — Mini writing",
+    note: "Write 4–5 sentences about your hobby using Present Simple + one Present Continuous sentence.",
+    writing: {
+      placeholder: "Write here...",
+      plan: [
+        "I usually … (Present Simple)",
+        "I … every … (Present Simple)",
+        "Right now I am … (Present Continuous)",
+        "… is more … than … (Comparative)"
+      ],
+      rewardStars: 1
+    }
+  }
+},
 
     // -------------------------
     // Lesson 4 = Skills 1c (p10–11)
     // -------------------------
-    "m1|4": {
-      title: "Lesson 4 — Skills 1c: The Home of Horse Riding",
-      bookPages:[10,11],
-      openBookHint:"Read the article in the PDF (pages 10–11).",
+   "m1|4": {
+  title: "Lesson 4 — 1c Skills: The home of horse riding",
+  bookPage: 10,
 
-      exercises: [
-        {
-          id:"ex2b",
-          type:"mcq",
-          title:"2b) Read again and choose A/B/C (questions 1–4)",
-          items: [
-            { q:"1 What is the writer doing in the first paragraph?",
-              opts:["suggesting a sport to readers","introducing an important animal","describing the Kazakh steppe"],
-              a:"introducing an important animal"
-            },
-            { q:"2 The writer suggests that horses’ saddles were …",
-              opts:["always expensive","hardly ever used","very special"],
-              a:"very special"
-            },
-            { q:"3 Archery on horseback is …",
-              opts:["a traditional Kazakh skill","the best way to hunt and fight","the most famous horse sport"],
-              a:"a traditional Kazakh skill"
-            },
-            { q:"4 The writer says that horse riding holidays …",
-              opts:["more tourists are choosing them","started in Kazakhstan","help tourists explore Kazakhstan"],
-              a:"more tourists are choosing them"
-            }
-          ]
-        },
-        {
-          id:"ex4",
-          type:"fill",
-          title:"4) Complete the sentences",
-          bank:["breathtaking","beauty","freedom","symbol","valuable","traditional"],
-          items: [
-            { q:"1 Medina wore ________ clothes to take part in the horse riding competition.", a:"traditional" },
-            { q:"2 I am always amazed by the ________ of the steppe.", a:"beauty" },
-            { q:"3 There is a ________ view from the top of the mountain.", a:"breathtaking" },
-            { q:"4 This saddle belonged to my great-grandfather’s horse; it’s very ________.", a:"valuable" },
-            { q:"5 The horse is a ________ of strength and speed.", a:"symbol" },
-            { q:"6 When I see a wild horse galloping, it makes me think of ________.", a:"freedom" }
-          ]
-        }
-      ]
-    },
+  readingA: {
+    title: "Reading",
+    text:
+`Kazakhstan is famous for horse riding. For centuries, horses have been part of Kazakh culture.
+People used horses for travelling, hunting and traditional games.
+Today, horse riding is still popular among young people.`
+  },
+
+  trueFalse: {
+    title: "Ex 1 — True / False",
+    items: [
+      { q:"Horse riding is part of Kazakh culture.", a:true },
+      { q:"People used horses only for sport.", a:false },
+      { q:"Horse riding is still popular today.", a:true }
+    ]
+  },
+
+  complete: {
+    title: "Ex 2 — Complete",
+    items: [
+      { q:"Kazakhstan is famous for ______ riding.", a:"horse" },
+      { q:"Horses were used for ______ and hunting.", a:"travelling" }
+    ]
+  },
+
+  exercise3: {
+    title: "Ex 3 — Choose the correct answer",
+    items: [
+      { q:"Horses were important for …", opts:["culture","fashion","music"], a:"culture" },
+      { q:"Young people take up horse riding …", opts:["today","never","in the past"], a:"today" }
+    ]
+  },
+
+  exercise4: {
+    title: "Ex 4 — Answer the questions",
+    items: [
+      { q:"What is Kazakhstan famous for?", a:"horse riding" },
+      { q:"Why were horses important?", a:"for travelling and hunting" }
+    ]
+  },
+
+  exercise5: {
+    title: "Ex 5 — Vocabulary",
+    items: [
+      { q:"traditional means …", opts:["modern","part of culture"], a:"part of culture" }
+    ]
+  },
+
+  speaking: {
+    title: "Ex 6 — Speaking",
+    prompts: [
+      "Is horse riding popular in your country?",
+      "Do you like traditional hobbies?"
+    ]
+  },
+
+  exercise7: {
+    title: "Ex 7 — Choose the correct sentence",
+    items: [
+      {
+        q:"Horse riding is …",
+        opts:["a traditional hobby","a new hobby"],
+        a:"a traditional hobby"
+      }
+    ]
+  },
+
+  exercise8: {
+    title: "Ex 8 — Writing",
+    writing: {
+      placeholder:"Write 3–4 sentences about a traditional hobby.",
+      plan:[
+        "Name the hobby",
+        "Why people like it",
+        "Is it popular today?"
+      ],
+      rewardStars:1
+    }
+  }
+},
 
     // -------------------------
     // Lesson 5 = Everyday English 1d (p12)
     // -------------------------
-    "m1|5": {
-      title: "Lesson 5 — Everyday English 1d: Making plans",
-      bookPage: 12,
-      openBookHint:"Dialog and phrases are on page 12 in the PDF.",
+   "m1|5": {
+  title: "Lesson 5 — 1d Everyday English: Making plans",
+  bookPage: 12,
 
-      exercises: [
-        {
-          id:"pron",
-          type:"odd_one_out",
-          title:"6) Pronunciation: circle the odd word",
-          items: [
-            { q:"1 enough – tough – rough – though", a:"though" },
-            { q:"2 though – although – thorough – dough", a:"thorough" },
-            { q:"3 caught – daughter – laugh – haughty", a:"laugh" }
-          ]
-        }
-      ]
-    },
+  phrases: [
+    "What are you doing this weekend?",
+    "Do you fancy going…?",
+    "That sounds great!",
+    "Sorry, I can’t.",
+    "Maybe another time."
+  ],
+
+  exercise1: {
+    title: "Ex 1 — Choose the reply",
+    items: [
+      { q:"Do you fancy going out?", opts:["That sounds great!","I’m reading now."], a:"That sounds great!" }
+    ]
+  },
+
+  exercise2: {
+    title: "Ex 2 — Choose the reply",
+    items: [
+      { q:"Sorry, I can’t today.", opts:["Maybe another time.","Yes, I do."], a:"Maybe another time" }
+    ]
+  },
+
+  exercise3: {
+    title: "Ex 3 — Complete",
+    items: [
+      { q:"Do you fancy ______ to the cinema?", a:"going" }
+    ]
+  },
+
+  exercise4: {
+    title: "Ex 4 — True / False",
+    items: [
+      { q:"We use Everyday English to make plans.", a:true }
+    ]
+  },
+
+  exercise5: {
+    title: "Ex 5 — Choose",
+    items: [
+      { q:"Accepting an invitation:", opts:["That sounds great!","Sorry, I can’t."], a:"That sounds great!" }
+    ]
+  },
+
+  speaking: {
+    title: "Ex 6 — Speaking",
+    prompts:[
+      "Invite your friend somewhere.",
+      "Accept or refuse politely."
+    ]
+  }
+},
 
     // -------------------------
     // Lesson 6 = Across Cultures 1e (p13)
     // -------------------------
-    "m1|6": {
-      title: "Lesson 6 — Across Cultures 1e: Free-time fun",
-      bookPage: 13,
-      openBookHint:"Read page 13 in the PDF.",
+   "m1|6": {
+  title: "Lesson 6 — 1e Across cultures: Free time fun",
+  bookPage: 13,
 
-      exercises: [
-        {
-          id:"ex2",
-          type:"tfds",
-          title:"2) Mark T / F / DS",
-          items: [
-            { q:"1 Skateboarding is a great form of exercise.", a:"T" },
-            { q:"2 Skateboarding is getting more and more popular with teenagers.", a:"T" },
-            { q:"3 There are no special places for skateboarders in Almaty.", a:"F" },
-            { q:"4 Martial arts can make young people more confident.", a:"T" },
-            { q:"5 There are competitions for young martial arts fans.", a:"DS" }
-          ]
-        }
-      ]
-    },
+  readingA: {
+    title: "Reading",
+    text:
+`Teenagers around the world enjoy different free-time activities.
+Some prefer sports, others like creative hobbies.`
+  },
+
+  exercise1: {
+    title: "Ex 1 — Choose",
+    items: [
+      { q:"Teenagers enjoy …", opts:["different activities","only sports"], a:"different activities" }
+    ]
+  },
+
+  trueFalse: {
+    title: "Ex 2 — True / False",
+    items: [
+      { q:"Teenagers have the same hobbies everywhere.", a:false }
+    ]
+  },
+
+  complete: {
+    title: "Ex 3 — Complete",
+    items: [
+      { q:"Free-time activities help teenagers ______.", a:"relax" }
+    ]
+  },
+
+  speaking: {
+    title: "Ex 4 — Speaking",
+    prompts:[
+      "What free-time activities are popular in your country?"
+    ]
+  }
+},
 
     // -------------------------
     // Lesson 7 = Across the Curriculum 1f (p14)
     // -------------------------
     "m1|7": {
-      title: "Lesson 7 — Across the Curriculum 1f: Bloggers produce around…",
-      bookPage: 14,
-      openBookHint:"Read page 14 in the PDF.",
+  title: "Lesson 7 — 1f Across the curriculum: Bloggers",
+  bookPage: 14,
 
-      exercises: [
-        {
-          id:"ex2",
-          type:"fill",
-          title:"2) Read again and complete the sentences",
-          items: [
-            { q:"1 Blogging is a great way for people to ________.", a:"share their ideas with the world" },
-            { q:"2 Bloggers can receive some money when a reader ________.", a:"clicks on the link and buys something" },
-            { q:"3 All bloggers need to write and share posts ________.", a:"often" },
-            { q:"4 Blogs that publish posts often are usually ________.", a:"the most popular" },
-            { q:"5 Bloggers have to learn ________.", a:"SEO and other web terms" },
-            { q:"6 Bloggers have to sign up to a plan to ________.", a:"get the best software" }
-          ]
-        }
-      ]
-    },
+  readingA: {
+    title: "Reading",
+    text:
+`Bloggers produce videos and posts. They plan, record and edit their content.`
+  },
+
+  trueFalse: {
+    title: "Ex 1 — True / False",
+    items: [
+      { q:"Bloggers plan their content.", a:true }
+    ]
+  },
+
+  exercise2: {
+    title: "Ex 2 — Choose",
+    items: [
+      { q:"Bloggers produce …", opts:["content","homework"], a:"content" }
+    ]
+  },
+
+  complete: {
+    title: "Ex 3 — Complete",
+    items: [
+      { q:"Bloggers record and ______ videos.", a:"edit" }
+    ]
+  },
+
+  speaking: {
+    title: "Ex 4 — Speaking",
+    prompts:[
+      "Do you watch bloggers?"
+    ]
+  }
+},
 
     // -------------------------
     // Lesson 8 = Writing 1g (p15)
     // -------------------------
-    "m1|8": {
-      title: "Lesson 8 — Writing 1g: An email describing a hobby",
-      bookPage: 15,
-      openBookHint:"See page 15 in the PDF.",
+  "m1|8": {
+  title: "Lesson 8 — 1g Writing: An email describing a hobby",
+  bookPage: 15,
 
-      exercises: [
-        {
-          id:"ex1",
-          type:"mcq",
-          title:"1) Complete the email with topic sentences (A–C). One is extra.",
-          items: [
-            { q:"Gap 1", opts:["A I love photography for lots of reasons.","B My favourite hobby is photography.","C I don’t have a lot of free time."], a:"B My favourite hobby is photography." },
-            { q:"Gap 2", opts:["A I love photography for lots of reasons.","B My favourite hobby is photography.","C I don’t have a lot of free time."], a:"A I love photography for lots of reasons." }
-          ],
-          note:"Extra sentence: C"
-        },
-        {
-          id:"ex2",
-          type:"fill",
-          title:"2) Rewrite using the linkers",
-          items: [
-            { q:"1 Free running is exciting. It can be dangerous. (but)", a:"Free running is exciting, but it can be dangerous." },
-            { q:"2 Collecting seashells is cheap. It’s easy to do. (as well)", a:"Collecting seashells is cheap and easy to do as well." },
-            { q:"3 Playing video games is fun. Playing too much isn’t good for us. (However)", a:"Playing video games is fun. However, playing too much isn’t good for us." },
-            { q:"4 Paintballing is great exercise. It can hurt. (though)", a:"Paintballing is great exercise, though it can hurt." },
-            { q:"5 Rock climbing is difficult. It is tiring. (too)", a:"Rock climbing is difficult and tiring too." }
-          ]
-        }
-      ]
+  readingA: {
+    title: "Model email",
+    text:
+`Hi Alex,
+I enjoy playing football. I play it after school.
+It is fun and healthy.
+What about you?
+Best wishes,
+Aslan`
+  },
+
+  exercise1: {
+    title: "Ex 1 — True / False",
+    items: [
+      { q:"The email is about a hobby.", a:true }
+    ]
+  },
+
+  exercise2: {
+    title: "Ex 2 — Complete",
+    items: [
+      { q:"The writer enjoys ______ football.", a:"playing" }
+    ]
+  },
+
+  exercise3: {
+    title: "Ex 3 — Answer",
+    items: [
+      { q:"What hobby does the writer have?", a:"football" }
+    ]
+  },
+
+  exercise4: {
+    title: "Ex 4 — Writing",
+    writing: {
+      placeholder:"Write your email here...",
+      plan:[
+        "Greeting",
+        "Your hobby",
+        "How often",
+        "Why you like it",
+        "Closing"
+      ],
+      rewardStars:1
     }
   }
-};
+},

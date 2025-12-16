@@ -56,6 +56,33 @@
     outEl.innerHTML = ok ? `<span class="ok">✅</span>` : `<span class="no">❌</span>`;
   }
 
+  // ---------- star burst animation ----------
+  function starBurst(anchorEl){
+    try { navigator.vibrate && navigator.vibrate(30); } catch(e){}
+    const rect = anchorEl?.getBoundingClientRect?.();
+    const baseX = rect ? (rect.left + rect.width/2) : (window.innerWidth/2);
+    const baseY = rect ? (rect.top + rect.height/2) : (window.innerHeight/2);
+
+    for (let i=0;i<10;i++){
+      const s = document.createElement("div");
+      s.className = "starFx";
+      s.textContent = "⭐";
+
+      const angle = Math.random() * Math.PI * 2;
+      const dist = 40 + Math.random() * 50;
+      const dx = Math.cos(angle) * dist;
+      const dy = Math.sin(angle) * dist;
+
+      s.style.left = `${baseX}px`;
+      s.style.top  = `${baseY}px`;
+      s.style.setProperty("--dx", `${dx}px`);
+      s.style.setProperty("--dy", `${dy}px`);
+
+      document.body.appendChild(s);
+      setTimeout(()=> s.remove(), 650);
+    }
+  }
+
   // ---------- lesson progress ----------
   function lessonBaseKey(lessonKey){
     return LSKEY(`lesson_${lessonKey}`);
@@ -80,6 +107,7 @@
     if (L?.exercise2) parts++;
     if (L?.trueFalse) parts++;
     if (L?.complete) parts++;
+    // auto parts:
     if (L?.readingA) parts++;
     if (L?.readingB) parts++;
     if (L?.grammar1) parts++;
@@ -87,6 +115,12 @@
     if (L?.grammar) parts++;
     if (L?.review) parts++;
     if (L?.fun) parts++;
+    if (L?.phrases) parts++;
+    if (L?.task) parts++;
+    if (L?.speaking) parts++;
+    if (L?.listening) parts++;
+    if (L?.reading) parts++;
+    if (L?.exercise) parts++;
     return Math.max(1, parts);
   }
 
@@ -95,24 +129,29 @@
     let doneParts = 0;
 
     const parts = [
-      ["exercise1", !!L?.exercise1],
-      ["exercise2", !!L?.exercise2],
-      ["trueFalse", !!L?.trueFalse],
-      ["complete",  !!L?.complete],
-      ["readingA",  !!L?.readingA],
-      ["readingB",  !!L?.readingB],
-      ["grammar1",  !!L?.grammar1],
-      ["grammar2",  !!L?.grammar2],
-      ["grammar",   !!L?.grammar],
-      ["review",    !!L?.review],
-      ["fun",       !!L?.fun],
+      ["exercise1", !!L?.exercise1, false],
+      ["exercise2", !!L?.exercise2, false],
+      ["trueFalse", !!L?.trueFalse, false],
+      ["complete",  !!L?.complete, false],
+
+      // autoDone blocks (показаны = считаем пройдено)
+      ["readingA",  !!L?.readingA, true],
+      ["readingB",  !!L?.readingB, true],
+      ["grammar1",  !!L?.grammar1, true],
+      ["grammar2",  !!L?.grammar2, true],
+      ["grammar",   !!L?.grammar, true],
+      ["review",    !!L?.review, true],
+      ["fun",       !!L?.fun, true],
+      ["phrases",   !!L?.phrases, true],
+      ["task",      !!L?.task, true],
+      ["speaking",  !!L?.speaking, true],
+      ["listening", !!L?.listening, true],
+      ["reading",   !!L?.reading, true],
+      ["exercise",  !!L?.exercise, true],
     ];
 
-    parts.forEach(([id, exists])=>{
+    parts.forEach(([id, exists, autoDone])=>{
       if (!exists) return;
-
-      // чтение/грамматику считаем как "пройдено" автоматически (текст показан)
-      const autoDone = (id.startsWith("reading") || id.startsWith("grammar") || id==="review" || id==="fun");
       if (autoDone) doneParts++;
       else if (isLocked(lessonKey, id)) doneParts++;
     });
@@ -126,7 +165,7 @@
 
   // ---------- helpers ----------
   function escapeHtml(s) {
-    return String(s).replace(/[&<>"]/g, c => ({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;" }[c]));
+    return String(s ?? "").replace(/[&<>"]/g, c => ({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;" }[c]));
   }
 
   function mixWithWhite(hex, t) {
@@ -231,9 +270,48 @@
       <div class="card">
         <div class="title">${escapeHtml(g.title || "Grammar")}</div>
         <div class="line"></div>
-        <div class="small"><b>EN:</b> ${escapeHtml(g.enRule || "")}</div>
-        <div class="small" style="margin-top:6px"><b>RU:</b> ${escapeHtml(g.ruRule || "")}</div>
+        ${g.enRule ? `<div class="small"><b>EN:</b> ${escapeHtml(g.enRule)}</div>` : ""}
+        ${g.ruRule ? `<div class="small" style="margin-top:6px"><b>RU:</b> ${escapeHtml(g.ruRule)}</div>` : ""}
         ${g.formula ? `<div class="line"></div><div class="small"><b>Formula:</b><br>${escapeHtml(g.formula).replace(/\n/g,"<br>")}</div>` : ""}
+      </div>
+    `;
+  }
+
+  function renderSimpleListCard(title, items){
+    return `
+      <div class="card">
+        <div class="title">${escapeHtml(title || "Info")}</div>
+        <div class="line"></div>
+        ${(items||[]).map(x => `<div class="small">• ${escapeHtml(x)}</div>`).join("")}
+      </div>
+    `;
+  }
+
+  function renderTaskCard(task){
+    return `
+      <div class="card">
+        <div class="title">${escapeHtml(task.title || "Task")}</div>
+        <div class="line"></div>
+        ${(task.plan||[]).map(x => `<div class="small">• ${escapeHtml(x)}</div>`).join("")}
+      </div>
+    `;
+  }
+
+  function renderSpeakingCard(speaking){
+    return `
+      <div class="card">
+        <div class="title">${escapeHtml(speaking.title || "Speaking")}</div>
+        <div class="line"></div>
+        ${(speaking.prompts||[]).map(x => `<div class="small">• ${escapeHtml(x)}</div>`).join("")}
+      </div>
+    `;
+  }
+
+  function renderListeningCard(listening){
+    return `
+      <div class="card">
+        <div class="title">${escapeHtml(listening.title || "Listening")}</div>
+        <div class="muted">${escapeHtml(listening.note || "")}</div>
       </div>
     `;
   }
@@ -317,7 +395,7 @@
     `;
   }
 
-  // categorise (без правильных ответов в data → даём 1⭐ за Submit)
+  // categorise (нет ключа правильных ответов в data => 1⭐ за Submit)
   function renderCategorise(ex, exId) {
     const id = "cat_" + Math.random().toString(16).slice(2);
     const locked = isLocked(STATE.lessonKey, exId);
@@ -352,7 +430,7 @@
     `;
   }
 
-  // its phrases (даём 1⭐ за Submit)
+  // its phrases (1⭐ за Submit)
   function renderItsPhrases(ex, exId) {
     const id = "its_" + Math.random().toString(16).slice(2);
     const locked = isLocked(STATE.lessonKey, exId);
@@ -387,6 +465,29 @@
           <button class="btn btnPrimary" ${locked?"disabled":""} data-submit="${id}|${exId}">Submit</button>
           <span class="small" data-score="${id}"></span>
         </div>
+      </div>
+    `;
+  }
+
+  function renderFunCard(fun){
+    const items = Array.isArray(fun) ? fun : [];
+    if (!items.length) return "";
+    return `
+      <div class="card">
+        <div class="title">Edutainment</div>
+        <div class="line"></div>
+        ${items.map(x=>`<div class="small">• ${escapeHtml(x)}</div>`).join("")}
+      </div>
+    `;
+  }
+
+  function renderReviewCard(review){
+    if (!review) return "";
+    return `
+      <div class="card">
+        <div class="title">${escapeHtml(review.title || "Review")}</div>
+        <div class="line"></div>
+        ${(review.items||[]).map(x=>`<div class="small">• ${escapeHtml(x)}</div>`).join("")}
       </div>
     `;
   }
@@ -447,7 +548,7 @@
       btn.onclick = () => speak(btn.getAttribute("data-say"));
     });
 
-    // MCQ click + store choice + ✅/❌
+    // MCQ click + store choice + ✅/❌ + ⭐✨
     document.querySelectorAll("[data-mcq]").forEach(btn=>{
       btn.onclick = () => {
         const [cardId, exId, idx, opt] = btn.getAttribute("data-mcq").split("|");
@@ -457,6 +558,7 @@
 
         const msg = document.querySelector(`[data-msg="${cardId}|${idx}"]`);
         markResult(msg, ok);
+        if (ok) starBurst(btn);
 
         const store = getJSON(LSKEY(`pick_${STATE.lessonKey}_${exId}`), {});
         store[i] = { opt, ok };
@@ -464,7 +566,7 @@
       };
     });
 
-    // True/False click + store + ✅/❌
+    // True/False click + store + ✅/❌ + ⭐✨
     document.querySelectorAll("[data-tf]").forEach(btn=>{
       btn.onclick = () => {
         const [cardId, exId, idx, val] = btn.getAttribute("data-tf").split("|");
@@ -473,6 +575,7 @@
 
         const msg = document.querySelector(`[data-msg="${cardId}|${idx}"]`);
         markResult(msg, ok);
+        if (ok) starBurst(btn);
 
         const store = getJSON(LSKEY(`pick_${STATE.lessonKey}_${exId}`), {});
         store[i] = { opt: val, ok };
@@ -498,11 +601,13 @@
         const score = document.querySelector(`[data-score="${cardId}"]`);
         if (score) score.textContent = `Score: ${correct}/${total}  (+${correct}⭐)`;
 
+        if (correct > 0) starBurst(b);
+
         render();
       };
     });
 
-    // Submit (Complete / Categorise / Its) -> +1⭐ + lock
+    // Submit (Complete / Categorise / Its) -> +1⭐ + lock + ⭐✨
     document.querySelectorAll("[data-submit]").forEach(b=>{
       b.onclick = () => {
         const [cardId, exId] = b.getAttribute("data-submit").split("|");
@@ -515,6 +620,7 @@
         const score = document.querySelector(`[data-score="${cardId}"]`);
         if (score) score.textContent = `Submitted ✅ (+1⭐)`;
 
+        starBurst(b);
         render();
       };
     });
@@ -566,7 +672,7 @@
         STATE.user = { role: "student", login };
         STATE.screen = "modules";
         STATE.moduleId = APP_DATA.modules?.[0]?.id || "m1";
-        setStars(getStars()); // обновить ⭐ под новым логином
+        setStars(getStars());
         render();
         return;
       }
@@ -587,7 +693,6 @@
     const c = modules[0]?.color || "#00b86b";
     setTheme(c);
 
-    // module progress
     function moduleDoneCount(mod){
       const total = mod.lessonsCount || 10;
       let done = 0;
@@ -713,7 +818,7 @@
     const vocab = Array.isArray(L.vocabCards) ? L.vocabCards : [];
     const extras = Array.isArray(L.extras) ? L.extras : [];
 
-    // choose exercise1 renderer
+    // Exercise1 type switch
     let ex1Html = "";
     if (L.exercise1) {
       const items = L.exercise1.items || [];
@@ -760,6 +865,8 @@
           ${L.readingA ? renderReadingBlock(L.readingA.title || "Text A", L.readingA.text || "") : ""}
           ${L.readingB ? renderReadingBlock(L.readingB.title || "Text B", L.readingB.text || "") : ""}
 
+          ${L.reading ? renderReadingBlock(L.reading.title || "Reading", L.reading.text || "") : ""}
+
           ${L.grammar1 ? renderGrammar(L.grammar1) : ""}
           ${L.grammar2 ? renderGrammar(L.grammar2) : ""}
           ${L.grammar ? renderGrammar(L.grammar) : ""}
@@ -767,8 +874,18 @@
           ${L.trueFalse ? renderTrueFalse(L.trueFalse, "trueFalse") : ""}
           ${L.complete ? renderComplete(L.complete, "complete") : ""}
 
+          ${L.exercise ? (L.exercise.items ? renderTrueFalse({ title: L.exercise.title || "Exercise", items: L.exercise.items }, "exercise") : "") : ""}
+
+          ${L.phrases ? renderSimpleListCard("Everyday English", L.phrases) : ""}
+          ${L.task ? renderTaskCard(L.task) : ""}
+          ${L.speaking ? renderSpeakingCard(L.speaking) : ""}
+          ${L.listening ? renderListeningCard(L.listening) : ""}
+
           ${ex1Html}
           ${ex2Html}
+
+          ${L.review ? renderReviewCard(L.review) : ""}
+          ${L.fun ? renderFunCard(L.fun) : ""}
 
           ${extras.length ? `
             <div class="card">

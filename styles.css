@@ -1,21 +1,20 @@
 :root{
-  --text:#143321;
-  --muted:#3a6f55;
+  --text:#0f2a1c;
+  --muted:#2f6a4a;
   --line:rgba(0,0,0,.08);
 
-  /* 🍉 WATERMELON */
-  --red:#ff3b6b;
-  --green:#2ecc71;
-  --light:#f6fff9;
+  /* 📗 BOOK GREEN */
+  --green:#0aa35f;
+  --green2:#16c172;
+  --green3:#0b7a4a;
 
+  --red:#ff3b6b;
   --card:#ffffff;
-  --ok:#1ecf8a;
+  --ok:#12c987;
   --bad:#ff4d4d;
 }
 
 *{box-sizing:border-box}
-
-/* 🍉 СВЕТЛЫЙ АРБУЗНЫЙ ФОН */
 html, body { min-height:100%; }
 
 body{
@@ -23,168 +22,126 @@ body{
   font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
   color:var(--text);
 
-  /* 🔥 насыщенный алый фон */
+  /* ✅ зелёный фон приложения */
   background:
-    radial-gradient(900px 520px at 90% 0%, rgba(46,204,113,.25), transparent 60%),
-    radial-gradient(900px 520px at 10% 0%, rgba(255,255,255,.12), transparent 60%),
-    linear-gradient(180deg, #d4002a 0%, #b80024 55%, #8f001c 100%);
+    radial-gradient(900px 520px at 15% 0%, rgba(10,163,95,.28), transparent 60%),
+    radial-gradient(900px 520px at 85% 0%, rgba(22,193,114,.22), transparent 60%),
+    linear-gradient(180deg, #eafff3 0%, #f7fffb 45%, #eafff3 100%);
   background-attachment: fixed;
 }
 
-/* ===== LAYOUT ===== */
-.wrap{
-  max-width:1050px;
-  margin:0 auto;
-  padding:16px 14px 120px;
-}
+.wrap{max-width:1050px;margin:0 auto;padding:16px 14px 120px}
 
-/* ===== TOP BAR (СВЕТЛАЯ) ===== */
 .topbar{
-  display:flex;
-  align-items:center;
-  gap:12px;
-  padding:12px;
-  border-radius:18px;
-  background:
-    linear-gradient(135deg, rgba(46,204,113,.25), rgba(255,59,107,.18)),
-    #ffffff;
+  display:flex;align-items:center;gap:12px;
+  padding:12px;border-radius:18px;
+  background:linear-gradient(135deg, rgba(10,163,95,.22), rgba(22,193,114,.16)), #fff;
   border:1px solid var(--line);
 }
 
 .logo{
-  width:44px;
-  height:44px;
-  border-radius:14px;
-  overflow:hidden;
-  border:1px solid var(--line);
-  background:#ffffff;
-  display:grid;
-  place-items:center;
+  width:44px;height:44px;border-radius:14px;overflow:hidden;
+  border:1px solid var(--line);background:#fff;display:grid;place-items:center;
 }
-
-.logo img{
-  width:100%;
-  height:100%;
-  object-fit:cover;
-}
+.logo img{width:100%;height:100%;object-fit:cover}
 
 .girlBadge{
-  width:46px;
-  height:46px;
-  border-radius:16px;
-  background:#ffffff;
-  border:1px solid var(--line);
-  display:grid;
-  place-items:center;
-  font-size:22px;
+  width:46px;height:46px;border-radius:16px;
+  background:#fff;border:1px solid var(--line);
+  display:grid;place-items:center;font-size:22px;
 }
 
-.brand b{
-  font-size:16px;
-}
-.brand span{
-  font-size:12px;
-  color:var(--muted);
-}
+.brand b{font-size:16px}
+.brand span{font-size:12px;color:var(--muted)}
 
 .pill{
   margin-left:auto;
-  padding:8px 12px;
-  border-radius:999px;
-  border:1px solid var(--line);
-  background:#ffffff;
-  font-size:12px;
+  padding:8px 12px;border-radius:999px;
+  border:1px solid var(--line);background:#fff;font-size:12px;
 }
 
-/* ===== CARDS (БЕЛЫЕ) ===== */
 .card{
-  margin-top:14px;
-  padding:14px;
-  border-radius:18px;
-  background:#ffffff;
-  border:1px solid var(--line);
+  margin-top:14px;padding:14px;border-radius:18px;
+  background:#fff;border:1px solid var(--line);
 }
 
-/* ===== BUTTONS ===== */
+.grid{display:grid;grid-template-columns:repeat(12,1fr);gap:12px}
+.col-6{grid-column:span 6}
+.col-12{grid-column:span 12}
+@media(max-width:860px){.col-6{grid-column:span 12}}
+
 .btn{
-  border:0;
-  cursor:pointer;
-  padding:10px 14px;
-  border-radius:14px;
-  font-weight:800;
-  color:#ffffff;
-  background:linear-gradient(135deg, var(--green), var(--red));
+  border:0;cursor:pointer;
+  padding:10px 14px;border-radius:14px;
+  font-weight:900;color:#fff;
+  background:linear-gradient(135deg,var(--green2),var(--green));
 }
 .btn:active{transform:translateY(1px)}
-
 .btn.secondary{
-  background:#ffffff;
-  color:var(--text);
-  border:1px solid var(--line);
+  background:#fff;color:var(--text);
+  border:1px solid var(--line);font-weight:800;
 }
 
-/* ===== MODULE CARDS (ЯРКИЕ) ===== */
+.input{
+  width:100%;padding:12px 12px;border-radius:14px;
+  border:1px solid var(--line);background:#fff;color:var(--text);outline:none;
+}
+
+.hr{height:1px;background:rgba(0,0,0,.08);margin:12px 0}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.small{font-size:12px;color:var(--muted)}
+.msg{padding:10px 12px;border-radius:14px;border:1px solid var(--line);background:#fff;color:var(--muted)}
+
 .moduleCard{
-  padding:16px;
-  border-radius:18px;
-  border:1px solid var(--line);
-  background:linear-gradient(135deg, rgba(255,255,255,.6), #ffffff);
+  padding:16px;border-radius:18px;border:1px solid var(--line);
+  background:linear-gradient(135deg, rgba(255,255,255,.6), #fff);
+}
+.moduleHead{display:flex;justify-content:space-between;align-items:center}
+.tag{font-size:12px}
+
+.lessons{margin-top:10px;display:grid;gap:10px;grid-template-columns:repeat(4,1fr)}
+@media(max-width:860px){.lessons{grid-template-columns:repeat(2,1fr)}}
+
+.lessonBtn{
+  border:1px solid rgba(0,0,0,.08);
+  border-radius:16px;padding:12px 10px;cursor:pointer;
+  color:#fff;text-align:left;
+  box-shadow:0 10px 25px rgba(0,0,0,.10);
+}
+.lessonBtn b{display:block;font-size:13px;margin-bottom:4px}
+.lessonBtn span{font-size:11px;color:rgba(255,255,255,.92)}
+.lessonBtn:active{transform:translateY(1px)}
+
+.tabs{display:flex;gap:10px;flex-wrap:wrap;margin-top:10px}
+.tabBtn{
+  padding:10px 12px;border-radius:999px;cursor:pointer;
+  border:1px solid var(--line);background:#fff;color:var(--text);
+  font-weight:900;font-size:12px;
+}
+.tabBtn.active{
+  background:linear-gradient(135deg,var(--green2),var(--green));
+  color:#fff;border:0;
 }
 
-.moduleHead{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-}
-
-.tag{
-  font-size:12px;
-}
-
-/* ===== BOTTOM BAR (СВЕТЛАЯ) ===== */
+/* bottom bar */
 .bottomBar{
-  position:fixed;
-  left:0; right:0; bottom:0;
-  padding:10px;
-  background:
-    linear-gradient(135deg, rgba(46,204,113,.35), rgba(255,59,107,.35)),
-    #ffffff;
+  position:fixed;left:0;right:0;bottom:0;
+  padding:10px;background:linear-gradient(135deg, rgba(10,163,95,.28), rgba(22,193,114,.22)), #fff;
   border-top:1px solid var(--line);
 }
-
-.bottomInner{
-  max-width:1050px;
-  margin:0 auto;
-  display:flex;
-  gap:10px;
-}
-
+.bottomInner{max-width:1050px;margin:0 auto;display:flex;gap:10px}
 .bItem{
-  flex:1;
-  padding:12px;
-  border-radius:16px;
-  border:1px solid var(--line);
-  background:#ffffff;
-  color:var(--text);
-  font-weight:900;
-  display:flex;
-  justify-content:center;
-  gap:8px;
+  flex:1;padding:12px;border-radius:16px;border:1px solid var(--line);
+  background:#fff;color:var(--text);font-weight:900;display:flex;justify-content:center;gap:8px
 }
-
 .bItem.primary{
-  background:linear-gradient(135deg, var(--green), var(--red));
-  color:#ffffff;
+  background:linear-gradient(135deg,var(--green2),var(--green));
+  color:#fff;border:0;
 }
 
-/* ===== PRINT ===== */
+/* print */
 @media print{
   body{background:#fff;color:#000}
-  .topbar,.bottomBar,.btn{display:none}
+  .topbar,.bottomBar,.tabs,.btn{display:none !important;}
   .card{background:#fff;border:0}
 }
-.lessonBtn{
-  border:1px solid rgba(255,255,255,.25) !important;
-  box-shadow: 0 10px 25px rgba(0,0,0,.18);
-}
-.lessonBtn:hover{ filter:brightness(1.03); }

@@ -203,6 +203,60 @@
     `;
   }
 
+  // ✅ ---------- AUTO RENDER (Показывает всё, чего нет в стандартных блоках) ----------
+  function renderAnyCard(key, val) {
+    if (val == null) return "";
+
+    const title =
+      (typeof val === "object" && (val.title || val.name))
+        ? (val.title || val.name)
+        : key;
+
+    if (typeof val === "string" || typeof val === "number") {
+      return `
+        <div class="card">
+          <div class="title">${escapeHtml(title)}</div>
+          <div class="line"></div>
+          <div class="small">${escapeHtml(String(val)).replace(/\n/g,"<br>")}</div>
+        </div>
+      `;
+    }
+
+    if (Array.isArray(val)) {
+      return `
+        <div class="card">
+          <div class="title">${escapeHtml(title)}</div>
+          <div class="line"></div>
+          ${val.map((x,i)=>`
+            <div class="small">${i+1}. ${escapeHtml(
+              typeof x === "string" ? x : JSON.stringify(x)
+            )}</div>
+          `).join("")}
+        </div>
+      `;
+    }
+
+    let html = `
+      <div class="card">
+        <div class="title">${escapeHtml(title)}</div>
+    `;
+
+    if (val.note) html += `<div class="muted">${escapeHtml(val.note)}</div>`;
+    if (val.text) html += `<div class="line"></div><div class="readingText">${escapeHtml(val.text).replace(/\n/g,"<br>")}</div>`;
+
+    if (Array.isArray(val.items)) {
+      html += `<div class="line"></div>`;
+      html += val.items.map((it,i)=>{
+        if (typeof it === "string") return `<div class="small">${i+1}. ${escapeHtml(it)}</div>`;
+        if (typeof it === "object") return `<div class="small">${i+1}. ${escapeHtml(it.q || it.prompt || JSON.stringify(it))}</div>`;
+        return "";
+      }).join("");
+    }
+
+    html += `</div>`;
+    return html;
+  }
+
   // ---------- TTS ----------
   function speak(text) {
     const t = String(text || "").trim();
@@ -815,6 +869,22 @@
       return;
     }
 
+    // ✅ авто-блоки для всего, что не показано стандартно
+    const knownKeys = new Set([
+      "title","bookPage","note","vocabCards",
+      "grammar","grammar1","grammar2",
+      "exercise","exercise1","exercise2",
+      "trueFalse","complete",
+      "reading","readingA","readingB",
+      "listening","speaking","phrases",
+      "task","review","fun","extras"
+    ]);
+
+    const autoBlocks = Object.entries(L)
+      .filter(([k]) => !knownKeys.has(k))
+      .map(([k,v]) => renderAnyCard(k, v))
+      .join("");
+
     const vocab = Array.isArray(L.vocabCards) ? L.vocabCards : [];
     const extras = Array.isArray(L.extras) ? L.extras : [];
 
@@ -864,7 +934,6 @@
 
           ${L.readingA ? renderReadingBlock(L.readingA.title || "Text A", L.readingA.text || "") : ""}
           ${L.readingB ? renderReadingBlock(L.readingB.title || "Text B", L.readingB.text || "") : ""}
-
           ${L.reading ? renderReadingBlock(L.reading.title || "Reading", L.reading.text || "") : ""}
 
           ${L.grammar1 ? renderGrammar(L.grammar1) : ""}
@@ -886,6 +955,9 @@
 
           ${L.review ? renderReviewCard(L.review) : ""}
           ${L.fun ? renderFunCard(L.fun) : ""}
+
+          <!-- ✅ АВТОВЫВОД -->
+          ${autoBlocks}
 
           ${extras.length ? `
             <div class="card">

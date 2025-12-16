@@ -2,7 +2,7 @@ window.APP_DATA = {
   appTitle: "AI Bayan · Excel 7",
   bookPdf: "Excel-7.pdf",
 
-  // Модули (можно менять названия/цвета)
+  // Модули
   modules: [
     { id:"m1", title:"Module 1 — Hobbies & Leisure", color:"#0aa35f", lessonsCount: 8 },
     { id:"m2", title:"Module 2 — Communication & Technology", color:"#2dd4ff", lessonsCount: 8 },
@@ -344,7 +344,7 @@ window.APP_DATA = {
         },
         { id:"ex4", title:"Build a dialogue", type:"build",
           items:[
-            { words:["A:","Let’s","go","to","the","park","on","Sunday."], a:"A: Let’s go to the park on Sunday." },
+            { words:["A:","Let’s","go","to","the","park","on","Saturday."], a:"A: Let’s go to the park on Saturday." },
             { words:["B:","Sure,","why","not?","What","time?"], a:"B: Sure, why not? What time?" }
           ]
         }

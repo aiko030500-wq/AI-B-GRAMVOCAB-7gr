@@ -1,6 +1,7 @@
 (() => {
   const $ = (s) => document.querySelector(s);
 
+  // LOGINS
   const STUDENT_PIN = "2844";
   const TEACHER_LOGIN = "Teacher";
   const TEACHER_PIN = "3244";
@@ -10,11 +11,11 @@
     ...Array.from({length:15}, (_,i)=>`7VS${i+1}`),
   ];
 
-  const LS_KEY = "AI_BAYAN_EXCEL7_STATE_V2";
+  const LS_KEY = "AI_BAYAN_EXCEL7_STATE_V3";
 
   const state = load() || {
     user: null,
-    screen: "login",        // login | menu | module | lesson | teacher
+    screen: "login",        // login | menu | teacher | module | lesson
     activeModule: null,
     activeLessonKey: null,  // "m1|1"
     activeTab: "vocab",      // vocab | grammar | ex
@@ -42,6 +43,7 @@
     return `rgb(${mix(r)},${mix(g)},${mix(b)})`;
   }
 
+  // Stars
   function keyStars(moduleId){
     if(!state.user) return null;
     return `${state.user.login}_${moduleId}`;
@@ -68,6 +70,7 @@
     return totalStarsForLogin(state.user.login);
   }
 
+  // Attempts (1 try per exercise)
   function attemptKey(exId){
     if(!state.user || !state.activeLessonKey) return null;
     return `${state.user.login}_${state.activeLessonKey}_${exId}`;
@@ -84,6 +87,7 @@
     save();
   }
 
+  // AI (1 question per day for students)
   function aiKey(){ return state.user ? `${state.user.login}_lastAI` : null; }
   function aiStatusText(){
     if(!state.user || state.user.role!=="student") return "Teacher / unlimited";
@@ -96,9 +100,10 @@
     const { appTitle, modules } = window.APP_DATA;
 
     $("#app").innerHTML = `
-      <div class="wrap">
+      <div class="wrap hasBottom">
         <div class="topbar">
           <div class="logo">${logoEl()}</div>
+          <div class="girlBadge">${girlEl()}</div>
           <div class="brand">
             <b>${appTitle}</b>
             <span>🍉 Watermelon theme · Grade 7</span>
@@ -115,13 +120,21 @@
         ${state.screen==="module" ? screenModule(modules) : ""}
         ${state.screen==="lesson" ? screenLesson(modules) : ""}
       </div>
+
+      ${state.user ? bottomBar() : ""}
+      ${state.user ? aiModal() : ""}
     `;
 
     bind();
   }
 
   function logoEl(){
-    return `<img src="logo.png" alt="logo" onerror="this.style.display='none'; this.parentElement.innerHTML='🍉';" />`;
+    return `<img src="logo.png" alt="logo"
+      onerror="this.style.display='none'; this.parentElement.innerHTML='🍉';" />`;
+  }
+  function girlEl(){
+    return `<img src="girl.png" alt="girl"
+      onerror="this.style.display='none'; this.parentElement.innerHTML='👧';" />`;
   }
 
   function screenLogin(){
@@ -150,12 +163,9 @@
       <div class="card">
         <div class="row">
           <button id="btnLogout" class="btn secondary">Выйти</button>
-          ${state.user?.role==="teacher"
-            ? `<button id="btnTeacher" class="btn">Teacher Journal</button>`
-            : ``}
           <div class="kpi">
-            <div class="box">⭐ Stars: <b>${totalStars()}</b></div>
-            <div class="box">🧠 AI Bayan: <b>${aiStatusText()}</b></div>
+            <div class="box">Modules: <b>${modules.length}</b></div>
+            <div class="box">⭐ Total: <b>${totalStars()}</b></div>
           </div>
         </div>
 
@@ -166,15 +176,8 @@
         </div>
 
         <div class="hr"></div>
-
-        <div class="card" style="margin:0;border-radius:18px;">
-          <b>AI Bayan (1 вопрос в день)</b>
-          <div class="small" style="margin-top:6px">Вопрос по теме урока: грамматика/слова/ошибки.</div>
-          <div class="chatBox" style="margin-top:10px">
-            <textarea id="aiQ" class="input" placeholder="Например: Explain PS vs PC in RU + formula + 5 examples"></textarea>
-            <button id="btnAI" class="btn">Ask AI</button>
-          </div>
-          <div id="aiLog" class="chatLog" style="${state.aiLog ? "" : "display:none"}">${escapeHtml(state.aiLog)}</div>
+        <div class="msg">
+          Внизу: ⭐ Stars · 🧠 AI Bayan · 📒 Journal (для Teacher).
         </div>
       </div>
     `;
@@ -182,13 +185,12 @@
 
   function moduleCard(m){
     const base = m.color;
-    const moduleStars = getStarsFor(m.id);
     return `
       <div class="col-6">
         <div class="moduleCard" style="background:linear-gradient(135deg, ${shade(base,-0.25)}, rgba(0,0,0,.12));">
           <div class="moduleHead">
             <b>${m.title}</b>
-            <span class="tag">⭐ ${moduleStars}</span>
+            <span class="tag">⭐ ${getStarsFor(m.id)}</span>
           </div>
           <div class="small" style="margin-top:6px;color:rgba(255,255,255,.80)">Яркий модуль · Уроки оттенками</div>
           <div class="row" style="margin-top:10px">
@@ -203,7 +205,7 @@
     const rows = studentLogins.map(login => {
       const total = totalStarsForLogin(login);
       return `<div class="qRow" style="justify-content:space-between">
-        <b>${login}</b>
+        <b>${escapeHtml(login)}</b>
         <span class="small">⭐ ${total}</span>
       </div>`;
     }).join("");
@@ -218,7 +220,7 @@
           </div>
         </div>
         <div class="hr"></div>
-        <div class="msg">Список учеников и их ⭐ (сумма по модулям):</div>
+        <div class="msg">Список учеников и сумма ⭐ по модулям:</div>
         <div class="card" style="margin-top:10px">${rows}</div>
       </div>
     `;
@@ -230,8 +232,8 @@
 
     const lessons = Array.from({length:m.lessonsCount}, (_,i)=>({
       n: i+1,
-      title: `Lesson ${i+1}`,
       key: `${m.id}|${i+1}`,
+      title: `Lesson ${i+1}`,
       color: shade(m.color, -0.25 + (i*(0.5/(Math.max(1,m.lessonsCount-1)))))
     }));
 
@@ -272,9 +274,11 @@
       <div class="card">
         <div class="row">
           <button id="btnBackToModule" class="btn secondary">← Module</button>
+          <button id="btnOpenBook" class="btn secondary">📖 OPEN BOOK PAGE</button>
+          <button id="btnPrint" class="btn">🖨 Print</button>
           <div class="kpi">
-            <div class="box"><b>${title}</b></div>
-            <div class="box">⭐ Module stars: <b>${getStarsFor(mid)}</b></div>
+            <div class="box"><b>${escapeHtml(title)}</b></div>
+            <div class="box">⭐ Module: <b>${getStarsFor(mid)}</b></div>
           </div>
         </div>
 
@@ -319,12 +323,10 @@
   function exercisesView(c, moduleColor){
     const vocab = c.vocab;
 
-    // build matching exercise auto from vocab
     const ex1 = c.exercises.find(x=>x.id==="ex1");
     let matchHtml = "";
     if(ex1){
       const pairs = vocab.slice(0, ex1.pairsCount);
-      // shuffle RU
       const ruList = pairs.map(p=>p.ru).sort(()=>Math.random()-0.5);
       matchHtml = `
         <div class="card" style="margin:0">
@@ -419,12 +421,40 @@
       </div>
     ` : "";
 
+    return `${matchHtml}${missingHtml}${chooseHtml}${buildHtml}`;
+  }
+
+  function bottomBar(){
+    const isTeacher = state.user?.role === "teacher";
     return `
-      ${matchHtml}
-      ${missingHtml}
-      ${chooseHtml}
-      ${buildHtml}
-    `;
+    <div class="bottomBar">
+      <div class="bottomInner">
+        <button class="bItem" id="bStars">⭐ <small>${totalStars()}</small></button>
+        <button class="bItem primary" id="bAI">🧠 <small>AI Bayan</small> · <small>${aiStatusText()}</small></button>
+        ${isTeacher
+          ? `<button class="bItem" id="bJournal">📒 <small>Journal</small></button>`
+          : `<button class="bItem" id="bJournal" disabled style="opacity:.5;cursor:not-allowed">📒 <small>Journal</small></button>`
+        }
+      </div>
+    </div>`;
+  }
+
+  function aiModal(){
+    return `
+    <div class="modal" id="aiModal">
+      <div class="modalCard">
+        <div class="modalTop">
+          <b>AI Bayan (1 вопрос в день)</b>
+          <button class="btn secondary" id="aiClose">✕</button>
+        </div>
+        <div class="small" style="margin:8px 0">Задай вопрос по теме урока.</div>
+        <div class="chatBox">
+          <textarea id="aiQ" class="input" placeholder="Например: Explain this grammar in RU + formula + 5 examples"></textarea>
+          <button id="btnAI" class="btn">Ask</button>
+        </div>
+        <div id="aiLog" class="chatLog" style="${state.aiLog ? "" : "display:none"}">${escapeHtml(state.aiLog)}</div>
+      </div>
+    </div>`;
   }
 
   function bind(){
@@ -435,8 +465,6 @@
 
     if(state.screen==="menu"){
       $("#btnLogout")?.addEventListener("click", logout);
-      $("#btnTeacher")?.addEventListener("click", ()=>{ state.screen="teacher"; save(); render(); });
-
       document.querySelectorAll("[data-open-module]").forEach(btn=>{
         btn.addEventListener("click", ()=>{
           state.activeModule = btn.getAttribute("data-open-module");
@@ -444,8 +472,6 @@
           save(); render();
         });
       });
-
-      $("#btnAI")?.addEventListener("click", askAI);
     }
 
     if(state.screen==="teacher"){
@@ -466,6 +492,8 @@
 
     if(state.screen==="lesson"){
       $("#btnBackToModule")?.addEventListener("click", ()=>{ state.screen="module"; save(); render(); });
+      $("#btnOpenBook")?.addEventListener("click", openBookPage);
+      $("#btnPrint")?.addEventListener("click", doPrint);
 
       document.querySelectorAll("[data-tab]").forEach(b=>{
         b.addEventListener("click", ()=>{
@@ -474,12 +502,23 @@
         });
       });
 
-      // checks
       $("#check_ex1")?.addEventListener("click", ()=>checkMatch());
       $("#check_ex2")?.addEventListener("click", ()=>checkMissing());
       $("#check_ex3")?.addEventListener("click", ()=>checkChoose());
       $("#check_ex4")?.addEventListener("click", ()=>checkBuild());
     }
+
+    // bottom bar (works on every screen)
+    $("#bAI")?.addEventListener("click", ()=>{ $("#aiModal")?.classList.add("show"); });
+    $("#aiClose")?.addEventListener("click", ()=>{ $("#aiModal")?.classList.remove("show"); });
+    $("#bJournal")?.addEventListener("click", ()=>{
+      if(state.user?.role==="teacher"){ state.screen="teacher"; save(); render(); }
+    });
+    $("#bStars")?.addEventListener("click", ()=>{
+      alert(`⭐ Stars: ${totalStars()}`);
+    });
+
+    $("#btnAI")?.addEventListener("click", askAI);
   }
 
   function doLogin(){
@@ -529,10 +568,52 @@
     state.aiLog =
 `AI Bayan (demo):
 • Rule + formula + 2 examples
-• Want 5 practice sentences? ✅
+• I can explain in RU and give 5 practice sentences ✅
 
 Q: ${q}`;
     save(); render();
+    $("#aiModal")?.classList.add("show");
+  }
+
+  function openBookPage(){
+    const key = state.activeLessonKey;
+    const c = window.APP_DATA.lessonContent[key];
+    const p = Number(c?.bookPage || 1);
+    const pdf = window.APP_DATA.bookPdf || "Excel-7.pdf";
+    window.open(`${pdf}#page=${p}`, "_blank");
+  }
+
+  function doPrint(){
+    const key = state.activeLessonKey;
+    const c = window.APP_DATA.lessonContent[key];
+    const title = c?.title || "Lesson";
+    const vocab = c?.vocab?.map(w=>`${w.en} — ${w.ru}`).join("\n") || "";
+    const g = c?.grammar || {};
+
+    const html = `
+      <div class="printSheet">
+        <div class="watermark">AI BAYAN · EXCEL 7</div>
+        <h2>${escapeHtml(title)}</h2>
+        <p><b>Student:</b> ${escapeHtml(state.user?.login || "")}</p>
+        <hr/>
+        <h3>Vocabulary</h3>
+        <pre style="white-space:pre-wrap;font-size:14px">${escapeHtml(vocab)}</pre>
+        <hr/>
+        <h3>Grammar</h3>
+        <p><b>${escapeHtml(g.title||"")}</b></p>
+        <pre style="white-space:pre-wrap;font-size:14px">${escapeHtml((g.enRule||"")+"\n\n"+(g.ruRule||"")+"\n\nFORMULA:\n"+(g.formula||""))}</pre>
+        <hr/>
+        <p style="font-size:12px;color:#333">Watermark: AI Bayan · Excel 7 · ${new Date().toLocaleDateString()}</p>
+      </div>
+    `;
+
+    const w = window.open("", "_blank");
+    w.document.write(`<!doctype html><html><head><meta charset="utf-8"><title>Print</title>
+      <link rel="stylesheet" href="styles.css">
+    </head><body>${html}</body></html>`);
+    w.document.close();
+    w.focus();
+    w.print();
   }
 
   // --- Exercise checks (1 try) ---
@@ -544,7 +625,6 @@ Q: ${q}`;
     el.appendChild(s);
     setTimeout(()=>s.remove(), 650);
   }
-
   function currentModuleId(){
     return state.activeLessonKey ? state.activeLessonKey.split("|")[0] : state.activeModule;
   }
@@ -622,9 +702,7 @@ Q: ${q}`;
     save(); render();
   }
 
-  function norm(s){
-    return (s||"").trim().replace(/\s+/g," ").toLowerCase();
-  }
+  function norm(s){ return (s||"").trim().replace(/\s+/g," ").toLowerCase(); }
 
   function checkBuild(){
     if(isLocked("ex4")) return;

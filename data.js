@@ -29,285 +29,202 @@ window.APP_DATA = {
   ],
 
   // КОНТЕНТ
-  lessonContent: {
-    "m1|1": {
-      title: "Lesson 1 — Vocabulary: Free-time activities",
-      bookPage: 5,
-      vocabCards: [
-        { emoji:"💃", en:"dancing", ru:"танцы", tts:"dancing" },
-        { emoji:"🍳", en:"cooking", ru:"готовка", tts:"cooking" },
-        { emoji:"🧵", en:"sewing national costumes", ru:"шитьё национальной одежды", tts:"sewing national costumes" },
-        { emoji:"🎥", en:"vlogging", ru:"влогинг", tts:"vlogging" },
-        { emoji:"🥊", en:"boxing", ru:"бокс", tts:"boxing" },
-        { emoji:"🧗‍♂️", en:"rock climbing", ru:"скалолазание", tts:"rock climbing" },
-        { emoji:"🏄‍♂️", en:"windsurfing", ru:"виндсёрфинг", tts:"windsurfing" },
-        { emoji:"🎮", en:"playing video games", ru:"играть в видеоигры", tts:"playing video games" },
-        { emoji:"🧘‍♂️", en:"yoga", ru:"йога", tts:"yoga" }
-      ],
+  lessons: [
 
-      exercise1: {
-        title: "Ex 1 — Write the types of leisure activities",
-        categories: ["Outdoor activities", "Indoor activities", "Extreme sports", "Hobbies"],
-        items: [
-          "dancing","cooking","sewing national costumes","vlogging","boxing",
-          "rock climbing","windsurfing","playing video games","yoga"
-        ]
-      },
-
-      exercise2: {
-        title: "Ex 2 — Use the phrases",
-        itsGood: ["fun","exciting","thrilling","relaxing","amazing"],
-        itsBad: ["difficult","boring","dangerous","tiring","expensive"],
-        prompts: [
-          "I like __________ because it’s __________.",
-          "I don’t like __________ because it’s __________."
-        ]
-      },
-
-      extras: [
-        { type:"video", title:"Mini video", note:"(Добавим ссылку/кнопку позже)" },
-        { type:"think", title:"THINK!", note:"Who else likes/doesn’t like the same free-time activities as you? Why?" }
+/* =======================
+LESSON 1 — VOCABULARY
+======================= */
+{
+  id: "l1",
+  title: "Lesson 1 — Vocabulary: Free-time activities",
+  type: "vocabulary",
+  tasks: [
+    {
+      type: "match",
+      title: "Match the pictures with the activities",
+      items: [
+        { q: "dancing", a: "dancing" },
+        { q: "cooking", a: "cooking" },
+        { q: "vlogging", a: "vlogging" },
+        { q: "boxing", a: "boxing" },
+        { q: "rock climbing", a: "rock climbing" },
+        { q: "windsurfing", a: "windsurfing" },
+        { q: "playing video games", a: "playing video games" },
+        { q: "yoga", a: "yoga" }
       ]
     },
-
-    "m1|2": {
-  title: "Lesson 1a — Reading: Take up a hobby",
-  bookPage: 6,
-
-  vocabCards: [
-    { emoji:"🧠", en:"concentration", ru:"концентрация", tts:"concentration" },
-    { emoji:"🏆", en:"tournament", ru:"турнир", tts:"tournament" },
-    { emoji:"⭐", en:"talented", ru:"талантливый", tts:"talented" },
-    { emoji:"🤝", en:"take part (in)", ru:"принимать участие", tts:"take part in" },
-    { emoji:"💥", en:"injury", ru:"травма", tts:"injury" },
-    { emoji:"💰", en:"expensive", ru:"дорогой", tts:"expensive" },
-    { emoji:"⚠️", en:"risk", ru:"риск", tts:"risk" },
-    { emoji:"🌐", en:"online", ru:"онлайн", tts:"online" }
-  ],
-
-  exercise1: {
-    title: "Ex 1 — Write the types of hobbies",
-    categories: ["Sport hobbies", "Online hobbies", "Creative hobbies"],
-    items: [
-      "boxing",
-      "rock climbing",
-      "vlogging",
-      "playing video games",
-      "dancing",
-      "sewing national costumes"
-    ]
-  },
-
-  readingA: {
-    title: "Text A",
-    text:
-      "Many teenagers choose a hobby to relax after school. Some prefer sports like boxing or rock climbing. Others enjoy creative hobbies such as dancing or sewing national costumes. A hobby helps people develop skills and concentration."
-  },
-
-  readingB: {
-    title: "Text B",
-    text:
-      "Online hobbies are also popular. Teenagers can take part in online tournaments or create videos. However, some hobbies can be expensive or risky, so it is important to choose carefully."
-  },
-
-  trueFalse: {
-    title: "Ex 3 — True or False",
-    items: [
-      { q:"Teenagers choose hobbies only to win tournaments.", a:false },
-      { q:"Creative hobbies help develop skills.", a:true },
-      { q:"Online hobbies are popular with teenagers.", a:true },
-      { q:"All hobbies are cheap and safe.", a:false }
-    ]
-  },
-
-  complete: {
-    title: "Ex 4 — Complete the sentences",
-    items: [
-      "A hobby helps people develop __________ and concentration.",
-      "Some teenagers prefer __________ hobbies.",
-      "Online hobbies can be __________.",
-      "It is important to choose a hobby __________."
-    ]
-  },
-
-  extras: [
     {
-      type:"sync",
-      title:"THINK!",
-      note:"Which hobbies are popular with teenagers in your class? Why?"
-    },
-    {
-      type:"listen",
-      title:"Listen and repeat",
-      note:"Listen to the new words and repeat after AI Bayan."
-    },
-    {
-      type:"speak",
-      title:"Speaking",
-      note:"Talk about your hobby. Use: I like / I don’t like / because."
-    },
-    {
-      type:"write",
-      title:"Writing",
-      note:"Write 3–4 sentences about your hobby."
+      type: "choice",
+      title: "Use the phrases",
+      items: [
+        {
+          q: "I like yoga because it’s …",
+          options: ["dangerous", "relaxing", "boring"],
+          a: "relaxing"
+        },
+        {
+          q: "I don’t like boxing because it’s …",
+          options: ["exciting", "dangerous", "amazing"],
+          a: "dangerous"
+        }
+      ]
     }
   ]
 },
 
-    "m1|3": {
-  title: "Lesson 1b (Part 1) — Grammar: Present Simple & Plurals",
-  bookPage: 7,
-
-  grammar1: {
-    title: "Present Simple",
-    enRule:
-      "We use the Present Simple for habits, routines and facts.",
-    ruRule:
-      "Present Simple используется для привычек, регулярных действий и фактов.",
-    formula:
-      "I / You / We / They + V1\nHe / She / It + V(s)"
-  },
-
-  exercise1: {
-    title: "Ex 1 — Choose the correct form",
-    items: [
-      { q:"She ____ dancing after school.", opts:["likes","is liking"], a:"likes" },
-      { q:"They ____ video games every day.", opts:["play","are playing"], a:"play" },
-      { q:"He ____ boxing.", opts:["does","is doing"], a:"does" }
-    ]
-  },
-
-  grammar2: {
-    title: "Plural nouns",
-    enRule:
-      "Most nouns add -s or -es. Some nouns are irregular.",
-    ruRule:
-      "Во множественном числе обычно добавляется -s/-es. Есть неправильные формы.",
-    formula:
-      "book → books\nwatch → watches\nchild → children\nperson → people"
-  },
-
-  exercise2: {
-    title: "Ex 2 — Write the plural form",
-    items: ["child","person","hobby","watch","activity"]
-  }
+/* =======================
+LESSON 2 — READING 1a
+======================= */
+{
+  id: "l2",
+  title: "Lesson 2 — Reading 1a: Take up a hobby",
+  type: "reading",
+  textA: "Jack plays paintball every weekend...",
+  textB: "Alex enjoys video games and takes part in tournaments...",
+  tasks: [
+    {
+      type: "truefalse",
+      title: "Read and choose True or False",
+      items: [
+        { q: "Jack plays paintball during the week.", a: false },
+        { q: "Paintball can last two days.", a: true },
+        { q: "Alex is a popular gamer online.", a: true },
+        { q: "Alex hates sport.", a: false }
+      ]
+    }
+  ]
 },
 
-    "m1|4": {
-  title: "Lesson 1b (Part 2) — Comparatives",
-  bookPage: 8,
-
-  grammar: {
-    title: "Comparatives",
-    enRule:
-      "We use comparatives to compare two things.",
-    ruRule:
-      "Сравнительная степень используется для сравнения двух предметов.",
-    formula:
-      "short adjective + -er\nlong adjective → more + adjective"
-  },
-
-  exercise1: {
-    title: "Ex 1 — Choose the correct form",
-    items: [
-      { q:"Boxing is ____ than yoga.", opts:["more dangerous","dangerous"], a:"more dangerous" },
-      { q:"Dancing is ____ than boxing.", opts:["easier","easy"], a:"easier" },
-      { q:"Online games are ____ than board games.", opts:["more exciting","exciting"], a:"more exciting" }
-    ]
-  }
-},
-
-   "m1|5": {
-  title: "Lesson 1c — Listening & Speaking",
-  bookPage: 10,
-
-  listening: {
-    title: "Listen and choose",
-    note: "Students listen to teenagers talking about hobbies."
-  },
-
-  speaking: {
-    title: "Speaking",
-    prompts: [
-      "What is your favourite hobby?",
-      "How often do you do it?",
-      "Why do you like it?"
-    ]
-  }
-},
- 
-   "m1|6": {
-  title: "Lesson 1d — Skills: Traditional hobbies",
-  bookPage: 11,
-
-  reading: {
-    title: "Reading",
-    text:
-      "Some hobbies are part of national culture. In Kazakhstan people enjoy traditional activities such as horse riding and making national costumes."
-  },
-
-  exercise: {
-    title: "True / False",
-    items: [
-      { q:"Traditional hobbies are part of culture.", a:true },
-      { q:"Only teenagers have hobbies.", a:false }
-    ]
-  }
-},
-
-  "m1|7": {
-  title: "Lesson 1e — Everyday English",
-  bookPage: 12,
-
-  phrases: [
-    "What do you do in your free time?",
-    "I’m keen on…",
-    "I’m not interested in…",
-    "It’s really fun!"
+/* =======================
+LESSON 3 — USE OF ENGLISH 1b
+======================= */
+{
+  id: "l3",
+  title: "Lesson 3 — Use of English 1b",
+  type: "grammar",
+  rules: [
+    "Present Simple — habits and routines",
+    "Present Continuous — actions now",
+    "Comparatives and Superlatives"
   ],
-
-  exercise: {
-    title: "Make a dialogue",
-    note: "Use the phrases to talk about hobbies."
-  }
-},
- 
-    "m1|8": {
-  title: "Lesson 1f — Writing",
-  bookPage: 13,
-
-  task: {
-    title: "Write about your hobby",
-    plan: [
-      "What is your hobby?",
-      "How often do you do it?",
-      "Why do you like it?"
-    ]
-  }
-},
-
-    "m1|9": {
-  title: "Lesson 1g — Review",
-  bookPage: 14,
-
-  review: {
-    title: "Check yourself",
-    items: [
-      "Name three hobbies",
-      "Use one comparative",
-      "Make one sentence in Present Simple"
-    ]
-  }
+  tasks: [
+    {
+      type: "fill",
+      title: "Complete the gaps",
+      items: [
+        { q: "John sometimes ___ golf on Sundays.", a: "plays" },
+        { q: "Ann ___ a book at the moment.", a: "is reading" }
+      ]
+    },
+    {
+      type: "choice",
+      title: "Choose the correct form",
+      items: [
+        {
+          q: "This is the ___ shop in the area.",
+          options: ["large", "larger", "largest"],
+          a: "largest"
+        }
+      ]
+    }
+  ]
 },
 
-     "m1|10": {
-     title: "Edutainment",
-     bookPage: 15,
-     fun: [
-       "Quiz: Guess the hobby",
-       "Mini game: Categorise activities",
-       "Video: Teen hobbies around the world"
-     ]
-   }
-  }   // ← закрываем lessonContent
-};    // ← закрываем APP_DATA
+/* =======================
+LESSON 4 — SKILLS 1c
+======================= */
+{
+  id: "l4",
+  title: "Lesson 4 — Skills 1c: The Home of Horse Riding",
+  type: "skills",
+  tasks: [
+    {
+      type: "choice",
+      title: "Choose the correct answer",
+      items: [
+        {
+          q: "What is the author’s purpose?",
+          options: [
+            "to introduce an animal",
+            "to describe Kazakhstan",
+            "to suggest a sport"
+          ],
+          a: "to introduce an animal"
+        }
+      ]
+    }
+  ]
+},
+
+/* =======================
+LESSON 5 — EVERYDAY ENGLISH 1d
+======================= */
+{
+  id: "l5",
+  title: "Lesson 5 — Everyday English: Making plans",
+  type: "speaking",
+  tasks: [
+    {
+      type: "choice",
+      title: "Choose the correct reply",
+      items: [
+        {
+          q: "Why don’t you come along?",
+          options: ["Sorry, I can’t.", "I play football."],
+          a: "Sorry, I can’t."
+        }
+      ]
+    }
+  ]
+},
+
+/* =======================
+LESSON 6 — ACROSS CULTURES 1e
+======================= */
+{
+  id: "l6",
+  title: "Lesson 6 — Across Cultures",
+  type: "reading",
+  tasks: [
+    {
+      type: "truefalse",
+      title: "True / False",
+      items: [
+        { q: "Skateboarding is popular in Kazakhstan.", a: true },
+        { q: "There are no skate parks in Almaty.", a: false }
+      ]
+    }
+  ]
+},
+
+/* =======================
+LESSON 7 — ACROSS THE CURRICULUM 1f
+======================= */
+{
+  id: "l7",
+  title: "Lesson 7 — ICT: Blogging",
+  type: "reading",
+  tasks: [
+    {
+      type: "fill",
+      title: "Complete the sentences",
+      items: [
+        { q: "Blogging is a great way to ___ ideas.", a: "share" },
+        { q: "Bloggers can make ___ online.", a: "money" }
+      ]
+    }
+  ]
+},
+
+/* =======================
+LESSON 8 — WRITING 1g
+======================= */
+{
+  id: "l8",
+  title: "Lesson 8 — Writing: An email about a hobby",
+  type: "writing",
+  task: "Write an email (60–80 words) about your hobby."
+}
+
+]
+};

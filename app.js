@@ -230,12 +230,17 @@
     const m = modules.find(x => x.id === state.activeModule);
     if(!m) return `<div class="card msg">Модуль не найден</div>`;
 
-    const lessons = Array.from({length:m.lessonsCount}, (_,i)=>({
-      n: i+1,
-      key: `${m.id}|${i+1}`,
-      title: `Lesson ${i+1}`,
-      color: shade(m.color, -0.25 + (i*(0.5/(Math.max(1,m.lessonsCount-1)))))
-    }));
+   const lessons = Array.from({length:m.lessonsCount}, (_,i)=>{
+  const tStart = -0.55;
+  const tEnd = 0.35;
+  const t = tStart + (i * ((tEnd - tStart) / Math.max(1, m.lessonsCount - 1)));
+  return {
+    n: i+1,
+    key: `${m.id}|${i+1}`,
+    title: `Lesson ${i+1}`,
+    color: shade(m.color, t)
+  };
+});
 
     return `
       <div class="card">

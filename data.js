@@ -70,7 +70,90 @@ window.APP_DATA = {
       ]
     },
 
-    "m1|2": { title:"Lesson 1a — Reading 1a", bookPage: 6, note:"Дальше заполняем строго по книге." },
+    "m1|2": {
+  title: "Lesson 1a — Reading: Take up a hobby",
+  bookPage: 6,
+
+  vocabCards: [
+    { emoji:"🧠", en:"concentration", ru:"концентрация", tts:"concentration" },
+    { emoji:"🏆", en:"tournament", ru:"турнир", tts:"tournament" },
+    { emoji:"⭐", en:"talented", ru:"талантливый", tts:"talented" },
+    { emoji:"🤝", en:"take part (in)", ru:"принимать участие", tts:"take part in" },
+    { emoji:"💥", en:"injury", ru:"травма", tts:"injury" },
+    { emoji:"💰", en:"expensive", ru:"дорогой", tts:"expensive" },
+    { emoji:"⚠️", en:"risk", ru:"риск", tts:"risk" },
+    { emoji:"🌐", en:"online", ru:"онлайн", tts:"online" }
+  ],
+
+  exercise1: {
+    title: "Ex 1 — Write the types of hobbies",
+    categories: ["Sport hobbies", "Online hobbies", "Creative hobbies"],
+    items: [
+      "boxing",
+      "rock climbing",
+      "vlogging",
+      "playing video games",
+      "dancing",
+      "sewing national costumes"
+    ]
+  },
+
+  readingA: {
+    title: "Text A",
+    text:
+      "Many teenagers choose a hobby to relax after school. Some prefer sports like boxing or rock climbing. Others enjoy creative hobbies such as dancing or sewing national costumes. A hobby helps people develop skills and concentration."
+  },
+
+  readingB: {
+    title: "Text B",
+    text:
+      "Online hobbies are also popular. Teenagers can take part in online tournaments or create videos. However, some hobbies can be expensive or risky, so it is important to choose carefully."
+  },
+
+  trueFalse: {
+    title: "Ex 3 — True or False",
+    items: [
+      { q:"Teenagers choose hobbies only to win tournaments.", a:false },
+      { q:"Creative hobbies help develop skills.", a:true },
+      { q:"Online hobbies are popular with teenagers.", a:true },
+      { q:"All hobbies are cheap and safe.", a:false }
+    ]
+  },
+
+  complete: {
+    title: "Ex 4 — Complete the sentences",
+    items: [
+      "A hobby helps people develop __________ and concentration.",
+      "Some teenagers prefer __________ hobbies.",
+      "Online hobbies can be __________.",
+      "It is important to choose a hobby __________."
+    ]
+  },
+
+  extras: [
+    {
+      type:"sync",
+      title:"THINK!",
+      note:"Which hobbies are popular with teenagers in your class? Why?"
+    },
+    {
+      type:"listen",
+      title:"Listen and repeat",
+      note:"Listen to the new words and repeat after AI Bayan."
+    },
+    {
+      type:"speak",
+      title:"Speaking",
+      note:"Talk about your hobby. Use: I like / I don’t like / because."
+    },
+    {
+      type:"write",
+      title:"Writing",
+      note:"Write 3–4 sentences about your hobby."
+    }
+  ]
+},
+
     "m1|3": { title:"Lesson 1b (Part 1) — Grammar", bookPage: 7, note:"Present Simple/Continuous + Plurals." },
     "m1|4": { title:"Lesson 1b (Part 2) — Comparatives", bookPage: 8, note:"Comparatives/Superlatives + exercises." },
 

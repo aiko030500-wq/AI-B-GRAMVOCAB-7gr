@@ -1,55 +1,112 @@
 :root{
   --pageBg:#eefaf4;
   --cardBg: rgba(255,255,255,.92);
+  --ink:#0b1b16;
 }
 
 *{box-sizing:border-box}
 body{
   margin:0;
   font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial;
-  background: var(--pageBg);
-  color:#0b1b16;
+  background: linear-gradient(180deg, var(--pageBg), #ffffff);
+  color:var(--ink);
 }
 
-.wrap{max-width:520px;margin:0 auto;padding:14px 14px 28px}
+.wrap{max-width:640px;margin:0 auto;padding:14px 14px 28px}
 .top{
-  background: linear-gradient(90deg,#0aa35f,#18c27a);
-  color:#fff; border-radius:22px;
+  border-radius:22px;
   padding:16px 16px;
-  box-shadow:0 12px 30px rgba(0,0,0,.08);
-  margin-top:10px;
+  color:#fff;
+  box-shadow:0 12px 30px rgba(0,0,0,.10);
 }
-.logo{font-weight:800;font-size:18px}
+.topRow{display:flex;align-items:center;gap:12px}
+.logoImg{
+  width:44px;height:44px;border-radius:50%;
+  object-fit:cover;
+  border:3px solid rgba(255,255,255,.65);
+  background:rgba(255,255,255,.25);
+}
+.h1{font-weight:900;font-size:18px}
 .sub{opacity:.9;margin-top:4px;font-size:13px}
 
 .grid{display:grid;gap:12px;margin-top:14px}
-.mod{
-  border:3px solid #0aa35f;
-  border-radius:18px;
-  padding:14px;
-  background: var(--cardBg);
-  text-align:left;
-  box-shadow:0 10px 22px rgba(0,0,0,.06);
-}
-.modTitle{font-weight:800}
-.modMeta{opacity:.7;margin-top:4px;font-size:13px}
-
 .card{
-  background: var(--cardBg);
   border-radius:18px;
   padding:14px;
-  margin-top:14px;
+  background:var(--cardBg);
   box-shadow:0 10px 22px rgba(0,0,0,.06);
+  border:3px solid rgba(10,163,95,.25);
 }
-.h1{font-weight:900;font-size:18px;margin-bottom:8px}
-.pre{
-  white-space:pre-wrap;
-  background:#0b1b16;
-  color:#d6ffe9;
+.btn{
+  border:0;border-radius:14px;padding:12px 14px;
+  font-weight:800;
+  cursor:pointer;
+}
+.btnRow{display:flex;gap:10px;flex-wrap:wrap}
+.btnGhost{
+  background:transparent;
+  border:2px solid rgba(11,27,22,.18);
+  color:var(--ink);
+}
+.btnPrimary{color:#fff}
+
+.title{font-weight:900;font-size:16px}
+.muted{opacity:.7;font-size:12px;margin-top:6px}
+
+.lessonCard{
+  border-radius:18px;
+  padding:14px;
+  background:var(--cardBg);
+  box-shadow:0 10px 22px rgba(0,0,0,.06);
+  border:3px solid transparent;
+  text-align:left;
+}
+.lessonTop{display:flex;justify-content:space-between;gap:10px;align-items:flex-start}
+.badge{
+  font-size:12px;font-weight:800;
+  padding:6px 10px;border-radius:999px;
+  background:rgba(11,27,22,.06);
+}
+
+.vgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-top:10px}
+.vcard{
+  background:rgba(255,255,255,.92);
+  border-radius:16px;
   padding:10px;
-  border-radius:12px;
-  overflow:auto;
-  font-size:12px;
+  border:2px solid rgba(0,0,0,.06);
 }
-.muted{opacity:.7;font-size:12px;margin-top:10px}
-.foot{opacity:.65;font-size:12px;margin-top:14px}
+.vemoji{font-size:22px}
+.ven{font-weight:900;margin-top:6px}
+.vru{opacity:.75;font-size:12px;margin-top:2px}
+
+.catGrid{display:grid;gap:10px;margin-top:10px}
+.catBox{
+  border-radius:16px;padding:10px;
+  border:2px dashed rgba(0,0,0,.18);
+  background:rgba(255,255,255,.55);
+}
+.catTitle{font-weight:900;margin-bottom:8px}
+.pillRow{display:flex;gap:8px;flex-wrap:wrap}
+.pill{
+  border-radius:999px;padding:8px 10px;
+  background:rgba(0,0,0,.06);
+  border:1px solid rgba(0,0,0,.10);
+  font-weight:800;
+  cursor:pointer;
+}
+.pill.selected{outline:3px solid rgba(0,0,0,.12)}
+
+.line{height:1px;background:rgba(0,0,0,.08);margin:12px 0}
+
+.input{
+  width:100%;
+  border-radius:14px;
+  border:2px solid rgba(0,0,0,.12);
+  padding:12px 12px;
+  font-size:14px;
+  background:rgba(255,255,255,.92);
+}
+
+.small{font-size:12px;opacity:.75}
+.ok{color:#0aa35f;font-weight:900}
+.no{color:#ff3b30;font-weight:900}

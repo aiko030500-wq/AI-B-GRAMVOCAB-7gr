@@ -1,21 +1,21 @@
 :root{
-  --text:#eafff4;
-  --muted:#b7d9c6;
-  --line:rgba(255,255,255,.12);
+  --text:#143321;
+  --muted:#3a6f55;
+  --line:rgba(0,0,0,.08);
 
   /* 🍉 WATERMELON */
-  --red:#ff2f5f;
-  --green:#23d36b;
-  --dark:#070c08;
+  --red:#ff3b6b;
+  --green:#2ecc71;
+  --light:#f6fff9;
 
-  --card:rgba(18,26,20,.78);
-  --ok:#2ee59d;
+  --card:#ffffff;
+  --ok:#1ecf8a;
   --bad:#ff4d4d;
 }
 
 *{box-sizing:border-box}
 
-/* 🔥 СИЛЬНЫЙ АРБУЗНЫЙ ФОН */
+/* 🍉 СВЕТЛЫЙ АРБУЗНЫЙ ФОН */
 html, body { min-height:100%; }
 
 body{
@@ -24,12 +24,10 @@ body{
   color:var(--text);
 
   background:
-    radial-gradient(900px 500px at 15% 12%, rgba(35,211,107,.55), transparent 60%),
-    radial-gradient(900px 520px at 85% 14%, rgba(255,47,95,.55), transparent 60%),
-    radial-gradient(1100px 700px at 50% 115%, rgba(35,211,107,.30), transparent 65%),
-    linear-gradient(180deg, #040704 0%, #0b120c 55%, #040704 100%);
-
-  background-attachment: fixed;
+    radial-gradient(900px 500px at 15% 10%, rgba(46,204,113,.35), transparent 60%),
+    radial-gradient(900px 520px at 85% 12%, rgba(255,59,107,.35), transparent 60%),
+    radial-gradient(1100px 700px at 50% 115%, rgba(46,204,113,.25), transparent 65%),
+    linear-gradient(180deg, #f3fff7 0%, #ffffff 100%);
 }
 
 /* ===== LAYOUT ===== */
@@ -39,7 +37,7 @@ body{
   padding:16px 14px 120px;
 }
 
-/* ===== TOP BAR ===== */
+/* ===== TOP BAR (СВЕТЛАЯ) ===== */
 .topbar{
   display:flex;
   align-items:center;
@@ -47,10 +45,9 @@ body{
   padding:12px;
   border-radius:18px;
   background:
-    linear-gradient(135deg, rgba(35,211,107,.25), rgba(255,47,95,.18)),
-    var(--card);
+    linear-gradient(135deg, rgba(46,204,113,.25), rgba(255,59,107,.18)),
+    #ffffff;
   border:1px solid var(--line);
-  backdrop-filter: blur(8px);
 }
 
 .logo{
@@ -59,7 +56,7 @@ body{
   border-radius:14px;
   overflow:hidden;
   border:1px solid var(--line);
-  background:#06120c;
+  background:#ffffff;
   display:grid;
   place-items:center;
 }
@@ -74,7 +71,7 @@ body{
   width:46px;
   height:46px;
   border-radius:16px;
-  background:rgba(255,255,255,.08);
+  background:#ffffff;
   border:1px solid var(--line);
   display:grid;
   place-items:center;
@@ -83,7 +80,6 @@ body{
 
 .brand b{
   font-size:16px;
-  letter-spacing:.3px;
 }
 .brand span{
   font-size:12px;
@@ -95,28 +91,17 @@ body{
   padding:8px 12px;
   border-radius:999px;
   border:1px solid var(--line);
-  background:rgba(0,0,0,.25);
+  background:#ffffff;
   font-size:12px;
 }
 
-/* ===== CARDS ===== */
+/* ===== CARDS (БЕЛЫЕ) ===== */
 .card{
   margin-top:14px;
   padding:14px;
   border-radius:18px;
-  background:var(--card);
+  background:#ffffff;
   border:1px solid var(--line);
-}
-
-.grid{
-  display:grid;
-  grid-template-columns:repeat(12,1fr);
-  gap:12px;
-}
-.col-6{grid-column:span 6}
-.col-12{grid-column:span 12}
-@media(max-width:860px){
-  .col-6{grid-column:span 12}
 }
 
 /* ===== BUTTONS ===== */
@@ -126,25 +111,23 @@ body{
   padding:10px 14px;
   border-radius:14px;
   font-weight:800;
-  color:#06170f;
+  color:#ffffff;
   background:linear-gradient(135deg, var(--green), var(--red));
 }
 .btn:active{transform:translateY(1px)}
 
 .btn.secondary{
-  background:rgba(255,255,255,.08);
+  background:#ffffff;
   color:var(--text);
   border:1px solid var(--line);
 }
 
-/* ===== MODULE CARDS ===== */
+/* ===== MODULE CARDS (ЯРКИЕ) ===== */
 .moduleCard{
   padding:16px;
   border-radius:18px;
-  border:1px solid rgba(255,255,255,.15);
-  background:
-    linear-gradient(135deg, rgba(255,255,255,.12), transparent 60%);
-  position:relative;
+  border:1px solid var(--line);
+  background:linear-gradient(135deg, rgba(255,255,255,.6), #ffffff);
 }
 
 .moduleHead{
@@ -157,16 +140,15 @@ body{
   font-size:12px;
 }
 
-/* ===== BOTTOM BAR ===== */
+/* ===== BOTTOM BAR (СВЕТЛАЯ) ===== */
 .bottomBar{
   position:fixed;
   left:0; right:0; bottom:0;
   padding:10px;
   background:
-    linear-gradient(135deg, rgba(35,211,107,.45), rgba(255,47,95,.45)),
-    rgba(5,10,7,.85);
+    linear-gradient(135deg, rgba(46,204,113,.35), rgba(255,59,107,.35)),
+    #ffffff;
   border-top:1px solid var(--line);
-  backdrop-filter: blur(10px);
 }
 
 .bottomInner{
@@ -181,7 +163,7 @@ body{
   padding:12px;
   border-radius:16px;
   border:1px solid var(--line);
-  background:rgba(0,0,0,.25);
+  background:#ffffff;
   color:var(--text);
   font-weight:900;
   display:flex;
@@ -191,7 +173,7 @@ body{
 
 .bItem.primary{
   background:linear-gradient(135deg, var(--green), var(--red));
-  color:#06170f;
+  color:#ffffff;
 }
 
 /* ===== PRINT ===== */

@@ -300,15 +300,14 @@ window.APP_DATA = {
   }
 },
 
-   "m1|10": {
-  title: "Edutainment",
-  bookPage: 15,
-
-  fun: [
-    "Quiz: Guess the hobby",
-    "Mini game: Categorise activities",
-    "Video: Teen hobbies around the world"
-  ]
-}
-
-};
+     "m1|10": {
+     title: "Edutainment",
+     bookPage: 15,
+     fun: [
+       "Quiz: Guess the hobby",
+       "Mini game: Categorise activities",
+       "Video: Teen hobbies around the world"
+     ]
+   }
+  }   // ← закрываем lessonContent
+};    // ← закрываем APP_DATA

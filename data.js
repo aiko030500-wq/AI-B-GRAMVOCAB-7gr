@@ -7,8 +7,18 @@ window.APP_DATA = {
     studentPin: "2844",
     teacherPin: "3244",
     // логины (поменяй как тебе нужно)
-    allowedLogins: Array.from({ length: 15 }, (_, i) => `7E${i+1}`),
-  },
+  auth: {
+  studentPin: "2844",
+  teacherPin: "3244",
+
+  allowedLogins: [
+    // 7BLr1 – 7BLr15
+    ...Array.from({ length: 15 }, (_, i) => `7BLr${i + 1}`),
+
+    // 7VSt16 – 7VSt35
+    ...Array.from({ length: 20 }, (_, i) => `7VSt${i + 16}`)
+  ]
+},
 
   // 9 МОДУЛЕЙ
   modules: [

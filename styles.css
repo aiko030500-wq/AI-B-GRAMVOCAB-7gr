@@ -1,72 +1,95 @@
 :root{
-  --bg: #f5f7fb;          /* будет меняться через JS на самый светлый тон юнита */
-  --header: #0b6d77;      /* шапка */
-  --card: rgba(255,255,255,.86);
-  --stroke: rgba(0,0,0,.08);
-  --shadow: 0 10px 30px rgba(0,0,0,.10);
+  --bg: #f5f7fb;       /* меняется JS на самый светлый тон модуля */
+  --header: #0aa35f;   /* цвет шапки (цвет модуля) */
+  --card: rgba(255,255,255,.88);
+  --shadow: 0 10px 24px rgba(0,0,0,.10);
   --r: 22px;
 }
 
-html,body{
-  margin:0; padding:0;
+html, body{
+  margin:0;
+  padding:0;
   background: var(--bg);
   font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
 }
 
-#app{ min-height:100vh; }
+#app{ min-height: 100vh; }
 
-/* ====== HEADER (как на скрине) ====== */
+/* ===== HEADER ===== */
 .header{
   background: var(--header);
   color:#fff;
-  padding: 16px 16px 18px;
+  padding:16px 16px 18px;
   border-bottom-left-radius: 26px;
   border-bottom-right-radius: 26px;
   box-shadow: 0 10px 24px rgba(0,0,0,.18);
   position: sticky;
-  top:0;
-  z-index:10;
+  top: 0;
+  z-index: 10;
 }
 
-.headerRow{
-  display:flex;
-  align-items:center;
-  gap:12px;
-}
-
+.headerRow{ display:flex; align-items:center; gap:12px; }
 .logo{
   width:56px; height:56px;
-  border-radius: 50%;
+  border-radius:50%;
   background:#fff;
   padding:4px;
+  object-fit:cover;
   box-shadow: 0 6px 16px rgba(0,0,0,.18);
-  object-fit: cover;
 }
+.brandTitle{ font-weight:900; font-size:18px; line-height:1.1; }
+.brandSub{ opacity:.9; font-weight:800; margin-top:4px; }
 
-.brandTitle{ font-size:18px; font-weight:800; line-height:1.1; }
-.brandSub{ opacity:.9; font-weight:700; margin-top:4px; }
-
-/* ====== LAYOUT ====== */
+/* ===== LAYOUT ===== */
 .container{
   padding: 16px;
-  max-width: 520px;
+  max-width: 560px;
   margin: 0 auto;
 }
 
-/* ====== UNIT CARD (как у тебя: белая карточка + цветная рамка) ====== */
+/* ===== MENU CARDS ===== */
 .unitCard{
   background: var(--card);
   border-radius: var(--r);
   padding: 18px;
   margin: 12px 0;
-  border: 3px solid var(--stroke); /* мы будем подменять stroke на цвет рамки */
-  box-shadow: 0 10px 24px rgba(0,0,0,.08);
+  border: 3px solid rgba(0,0,0,.06);
+  box-shadow: var(--shadow);
+}
+.unitTitle{ font-size:26px; font-weight:950; margin:0; color:#111; }
+.unitTopic{ margin-top:6px; font-size:18px; font-weight:850; color: rgba(0,0,0,.55); }
+
+/* ===== TOOLBAR BUTTONS ===== */
+.toolbar{
+  display:flex;
+  gap:10px;
+  margin: 12px 0;
+}
+.pill{
+  border:none;
+  border-radius: 18px;
+  padding: 12px 14px;
+  font-weight: 900;
+  background: rgba(255,255,255,.85);
+  border: 2px solid rgba(0,0,0,.10);
 }
 
-.unitTitle{ font-size:26px; font-weight:900; margin:0; color:#111; }
-.unitTopic{ margin-top:6px; font-size:20px; font-weight:800; color: rgba(0,0,0,.55); }
+/* ===== LESSON BUTTONS ===== */
+.lessonGrid{
+  display:grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+.lessonBtn{
+  border:none;
+  border-radius: 20px;
+  padding: 16px 14px;
+  font-weight: 950;
+  color:#0b1020;
+  box-shadow: 0 10px 18px rgba(0,0,0,.12);
+}
 
-/* ====== внутри юнита: большая цветная карточка заголовка ====== */
+/* ===== HERO (внутри урока) ===== */
 .hero{
   border-radius: 26px;
   padding: 18px;
@@ -77,65 +100,127 @@ html,body{
   align-items:center;
   justify-content:space-between;
   gap:14px;
+  margin-bottom: 14px;
 }
-
-.hero h2{ margin:0; font-size:30px; font-weight:900; }
-.hero p{ margin:8px 0 0; font-size:18px; font-weight:800; opacity:.95; }
-
+.hero h2{ margin:0; font-size:28px; font-weight:950; }
+.hero p{ margin:8px 0 0; font-size:16px; font-weight:850; opacity:.95; }
 .heroImg{
-  width:86px; height:86px; border-radius: 50%;
-  background:#fff; padding:5px;
-  object-fit: cover;
+  width:86px; height:86px;
+  border-radius:50%;
+  background:#fff;
+  padding:5px;
+  object-fit:cover;
 }
 
-/* ====== белая карточка правила ====== */
+/* ===== WHITE CARD ===== */
 .card{
   background: var(--card);
   border-radius: 22px;
   padding: 16px;
-  margin: 14px 0;
+  margin: 12px 0;
   box-shadow: 0 10px 24px rgba(0,0,0,.08);
   border: 1px solid rgba(0,0,0,.06);
 }
+.card h3{ margin:0 0 10px; font-size:18px; font-weight:950; }
 
-/* ====== кнопки упражнений (2x2 как на скрине) ====== */
+.smallTag{
+  float:right;
+  background: rgba(0,0,0,.06);
+  padding: 8px 12px;
+  border-radius: 999px;
+  font-weight: 900;
+}
+
+/* ===== EXERCISE BUTTONS ===== */
 .grid2{
   display:grid;
   grid-template-columns: 1fr 1fr;
   gap: 12px;
-  margin-top: 12px;
 }
-
 .exBtn{
   border:none;
-  padding: 14px 14px;
+  padding: 14px;
   border-radius: 18px;
-  font-weight: 900;
-  font-size: 16px;
+  font-weight: 950;
+  font-size: 15px;
   color:#fff;
   box-shadow: 0 10px 18px rgba(0,0,0,.16);
 }
-
 .exBtn.muted{ opacity:.45; }
 
-/* ====== низ: кнопки Check/Back/Print ====== */
+/* ===== QUESTIONS ===== */
+.qCard{
+  background: rgba(255,255,255,.78);
+  border: 2px solid rgba(0,0,0,.08);
+  border-radius: 18px;
+  padding: 14px;
+  margin: 12px 0;
+}
+.qText{ font-weight: 900; font-size: 18px; color:#0b1020; }
+.input{
+  width: 100%;
+  margin-top: 10px;
+  padding: 14px;
+  border-radius: 16px;
+  border: 2px solid rgba(0,0,0,.10);
+  background: rgba(255,255,255,.95);
+  font-size: 16px;
+  font-weight: 800;
+  box-sizing: border-box;
+}
+.select{
+  width:100%;
+  margin-top:10px;
+  padding: 14px;
+  border-radius: 16px;
+  border: 2px solid rgba(0,0,0,.10);
+  background: rgba(255,255,255,.95);
+  font-size: 16px;
+  font-weight: 800;
+}
+
 .row3{
   display:flex;
   gap:12px;
   margin-top: 12px;
 }
-
 .btn{
   flex:1;
   padding: 14px;
   border-radius: 18px;
-  font-weight: 900;
+  font-weight: 950;
   border: 2px solid rgba(0,0,0,.10);
   background: rgba(255,255,255,.9);
 }
-
 .btn.primary{
   color:#fff;
   border:none;
   box-shadow: 0 10px 18px rgba(0,0,0,.16);
+}
+
+.note{
+  opacity:.8;
+  font-weight: 900;
+  margin-top: 8px;
+}
+
+.ok{ color:#118a4c; font-weight: 950; }
+.bad{ color:#cc1f1f; font-weight: 950; }
+
+@media print{
+  body{ background:#fff !important; }
+  .header, .toolbar, .row3{ display:none !important; }
+  .printWatermark{
+    position: fixed;
+    inset: 0;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size: 56px;
+    font-weight: 950;
+    color: rgba(0,0,0,.06);
+    transform: rotate(-20deg);
+    pointer-events:none;
+    z-index:9999;
+  }
 }

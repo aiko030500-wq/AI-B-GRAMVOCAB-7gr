@@ -65,65 +65,344 @@ window.APP_DATA = {
     /* ======================================================
        LESSON 2 — Reading 1a (Take up a hobby)
        ====================================================== */
-    "m1|2": {
-      bookPage: 6,
-      title: "Module 1 · Lesson 2 — Reading: Take up a hobby",
-      reading: {
-        title: "Take up a hobby",
-        text:
-"Read the two texts in your book:\n• Super Gaming\n• Paint Wars",
-        tasks: [
-          { q:"Read again and mark the sentences as T (true), F (false) or DS (doesn’t say)." }
-        ]
-      },
-      exercises: [
-        {
-          id:"ex1",
-          type:"truefalse",
-          title:"True / False / Doesn’t say",
-          items:[
-            { q:"Jack plays paintball during the week." },
-            { q:"Jack’s team often wins games." },
-            { q:"Paintball is an expensive hobby." },
-            { q:"Alex plays games on a website." },
-            { q:"Alex’s family think his hobby is a bad idea." },
-            { q:"Alex prefers real sports." }
-          ]
-        }
+ "m1|2": {
+  bookPage: 6,
+  title: "Module 1 · Lesson 2 — Reading 1a: Take up a hobby",
+
+  // 1) VOCAB (Check these words) + emoji
+  vocab: [
+    { en:"paint", ru:"краска", emoji:"🎨" },
+    { en:"wood", ru:"лес", emoji:"🌲" },
+    { en:"hurt", ru:"пораниться / болеть", emoji:"🤕" },
+    { en:"field", ru:"поле", emoji:"🏞️" },
+    { en:"take role (in)", ru:"играть роль (в)", emoji:"🎭" },
+    { en:"spy", ru:"шпион", emoji:"🕵️" },
+    { en:"adventure", ru:"приключение", emoji:"🗺️" },
+    { en:"last", ru:"длиться", emoji:"⏳" },
+    { en:"painful", ru:"болезненный", emoji:"😣" },
+    { en:"I don’t mind", ru:"я не против", emoji:"🙂" },
+    { en:"stare", ru:"пялиться / пристально смотреть", emoji:"👀" },
+    { en:"screen", ru:"экран", emoji:"🖥️" },
+    { en:"concentration", ru:"концентрация", emoji:"🎯" },
+    { en:"talented", ru:"талантливый", emoji:"🌟" },
+    { en:"tournament", ru:"турнир", emoji:"🏆" },
+    { en:"online", ru:"онлайн", emoji:"🌐" },
+    { en:"followers", ru:"подписчики", emoji:"👥" },
+    { en:"support", ru:"поддержка", emoji:"🤝" },
+    { en:"square-eyed", ru:"«залипший в экране»", emoji:"📺" }
+  ],
+
+  // 3) TEXT A & B (коротко + поля для полного текста)
+  reading: {
+    title: "Take up a hobby — Text A & Text B",
+    // короткие отрывки (чтобы было красиво в приложении)
+    text:
+"Text A (Paint Wars): Read in your book (p.6).\nText B (Super Gaming): Read in your book (p.6).",
+    // если захочешь вставить полностью сама — вставь сюда
+    textA_full: "",
+    textB_full: ""
+  },
+
+  exercises: [
+    // 2) EX1 — Write hobbies/leisure activities (из книги)
+    {
+      id:"ex1",
+      type:"short",
+      title:"Ex 1 — Write hobbies & leisure activities",
+      items: [
+        { q:"In a minute write down as many different hobbies and leisure activities as you can. Compare with your partner." }
       ]
     },
+
+    // 7) LISTEN AND REPEAT (как в шапке задания 2)
+    {
+      id:"ex2",
+      type:"short",
+      title:"Listen and repeat",
+      items: [
+        { q:"Listen and repeat the key words from the lesson (activities + Check these words)." }
+      ]
+    },
+
+    // 2) (из книги) — где можно играть? больно ли? турниры? (под картинками)
+    {
+      id:"ex3",
+      type:"short",
+      title:"Ex 2 — Look at the title and pictures",
+      items: [
+        { q:"Where can someone play paintball?" },
+        { q:"Does it hurt if someone hits you?" },
+        { q:"Do video gamers take part in tournaments?" },
+        { q:"Listen and read to find out." }
+      ]
+    },
+
+    // 4) EX3 — T / F / DS (точно как в книге)
+    {
+      id:"ex4",
+      type:"truefalse",
+      title:"Ex 3 — Read again and mark: T / F / DS",
+      items: [
+        { q:"Text A: Jack plays games of paintball during the week." },
+        { q:"Text A: Jack’s team often wins the games." },
+        { q:"Text A: A game of paintball can take a long time." },
+        { q:"Text A: Paintball is an expensive hobby." },
+
+        { q:"Text B: Alex plays against gamers from other countries." },
+        { q:"Text B: Alex is a popular gamer on a website." },
+        { q:"Text B: Alex’s family think his hobby is a bad idea." },
+        { q:"Text B: Alex does not like playing real sports." }
+      ]
+    },
+
+    // 5) EX4 — Complete (я оставляю «точную структуру», ты если надо добавишь ответы)
+    // потому что на фото Ex4 не видно полностью; как только пришлёшь страницу ниже — сделаю 1в1.
+    {
+      id:"ex5",
+      type:"build",
+      title:"Ex 4 — Complete the sentences (from the text)",
+      items: [
+        { words:["Paintballing","is","only","...","(one word from the text)"], answer:"" },
+        { words:["Games","can","last","from","...","to","..."], answer:"" },
+        { words:["Alex","has","hundreds","of","...","on","YouTube"], answer:"" },
+        { words:["Some","people","call","him","..."], answer:"" }
+      ]
+    },
+
+    // 6) SYNC (как отдельный мини-блок)
+    {
+      id:"ex6",
+      type:"short",
+      title:"Sync",
+      items: [
+        { q:"Work in pairs. Check your answers and explain your choices (T/F/DS)." }
+      ]
+    },
+
+    // 8) SPEAKING
+    {
+      id:"ex7",
+      type:"short",
+      title:"Speaking",
+      items: [
+        { q:"Which hobby from the texts is more interesting for you? Why?" },
+        { q:"Do you think paintball is dangerous? Explain." },
+        { q:"Do you think gaming can be a serious hobby? Explain." }
+      ]
+    },
+
+    // 9) WRITING
+    {
+      id:"ex8",
+      type:"short",
+      title:"Writing",
+      items: [
+        { q:"Write 5–6 sentences about your hobby. Use: fun/exciting/boring/dangerous + because." }
+      ]
+    }
+  ]
+}
 
     /* ======================================================
        LESSON 3 — Use of English 1b
        ====================================================== */
     "m1|3": {
-      bookPage: 8,
-      title: "Module 1 · Lesson 3 — Use of English: Present Simple vs Present Continuous",
-      grammar: {
-        title: "Present Simple / Present Continuous (book)",
-        rule:
-"Use the present simple for permanent states, general truths and habits.\nUse the present continuous for actions happening now or temporary situations.",
-        examples: [
-          "I live in a big city.",
-          "She plays sports at weekends.",
-          "I’m writing an email now.",
-          "He is working at a café this month."
-        ]
-      },
-      exercises: [
-        {
-          id:"ex1",
-          type:"choose",
-          title:"Choose the correct form",
-          items:[
-            { q:"John sometimes ____ golf on Sundays.", opts:["plays","is playing"] },
-            { q:"Ann ____ in her room now.", opts:["cooks","is cooking"] },
-            { q:"I ____ ice skating tonight.", opts:["go","am going"] },
-            { q:"I ____ at 4 pm.", opts:["start","am starting"] }
-          ]
-        }
+  bookPage: 7,
+  title: "Module 1 · Lesson 3 — Use of English 1b",
+
+  /* ===============================
+     1) PRESENT SIMPLE — RULES
+     =============================== */
+  grammarPS: {
+    title: "Present Simple",
+    enRule:
+"We use the Present Simple to talk about:\n" +
+"• permanent states and general truths\n" +
+"• habits and routines\n" +
+"• timetables and schedules\n" +
+"• time expressions: every day, often, on Mondays",
+    ruRule:
+"Present Simple используется для:\n" +
+"• постоянных состояний и фактов\n" +
+"• привычек и регулярных действий\n" +
+"• расписаний и графиков\n" +
+"• слов: every day, often, on Mondays",
+    formula:
+"I / You / We / They + V1\n" +
+"He / She / It + V(s)"
+  },
+
+  /* ===============================
+     2) EX 2 — Complete the gaps (PS / PC)
+     =============================== */
+  exercises: [
+
+    {
+      id:"ex2",
+      type:"choose",
+      title:"Ex 2 — Present Simple or Present Continuous",
+      items:[
+        { q:"John sometimes ___ golf on Sundays.", opts:["plays","is playing"], a:"plays" },
+        { q:"Ann ___ a book in her room now.", opts:["reads","is reading"], a:"is reading" },
+        { q:"___ you ___ collecting stamps?", opts:["Do / like","Are / liking"], a:"Do / like" },
+        { q:"Jen and Bill ___ go kart racing tonight.", opts:["go","are going"], a:"are going" },
+        { q:"Suzy’s class ___ start at 4 pm.", opts:["starts","is starting"], a:"starts" },
+        { q:"Adrian ___ to buy a new pair of sports shoes.", opts:["wants","is wanting"], a:"wants" },
+        { q:"___ you ___ to New York next month?", opts:["Do / fly","Are / flying"], a:"Are / flying" }
       ]
     },
+
+    /* ===============================
+       3) EX 3 — Put the verbs (email)
+       =============================== */
+    {
+      id:"ex3",
+      type:"build",
+      title:"Ex 3 — Present Simple / Present Continuous (email)",
+      items:[
+        { words:["I","am","very","busy","today"], answer:"I am very busy today." },
+        { words:["My","little","brother","has","a","fancy","dress"], answer:"My little brother has a fancy dress." },
+        { words:["Mum","is","tidying","the","house"], answer:"Mum is tidying the house." },
+        { words:["Dad","wants","to","be","a","pirate"], answer:"Dad wants to be a pirate." },
+        { words:["I","am","making","my","brother’s","costume"], answer:"I am making my brother’s costume." },
+        { words:["Mum","doesn’t","like","baking"], answer:"Mum doesn’t like baking." },
+        { words:["She","is","making","the","cake"], answer:"She is making the cake." }
+      ]
+    },
+
+    /* ===============================
+       4) PLURAL NOUNS — RULES
+       =============================== */
+    {
+      id:"plurals",
+      type:"rule",
+      title:"Singular / Plural nouns",
+      enRule:
+"Some nouns take a plural verb:\n" +
+"clothes, police, people, scissors.\n\n" +
+"Some nouns take a singular verb:\n" +
+"advice, news, homework, furniture.\n\n" +
+"Group nouns can be singular or plural:\n" +
+"family, team, class.",
+      ruRule:
+"Некоторые существительные используются только во множественном числе:\n" +
+"clothes, police, people.\n\n" +
+"Некоторые — только в единственном:\n" +
+"advice, news, homework.\n\n" +
+"Собирательные существительные могут быть в ед. или мн. числе:\n" +
+"family, team, class."
+    },
+
+    /* ===============================
+       5) EX 4 — Choose the correct item (plurals)
+       =============================== */
+    {
+      id:"ex4",
+      type:"choose",
+      title:"Ex 4 — Choose the correct item",
+      items:[
+        { q:"The police ___ on their way.", opts:["is","are"], a:"are" },
+        { q:"Physics ___ my favourite subject.", opts:["is","are"], a:"is" },
+        { q:"Your news ___ very interesting.", opts:["is","are"], a:"is" },
+        { q:"Your trousers ___ dirty.", opts:["is","are"], a:"are" },
+        { q:"Family ___ very precious to me.", opts:["is","are"], a:"is" }
+      ]
+    },
+
+    /* ===============================
+       6) COMPARATIVE & SUPERLATIVE — RULE
+       =============================== */
+    {
+      id:"comparativeRule",
+      type:"rule",
+      title:"Comparative & Superlative adjectives",
+      enRule:
+"Short adjectives: add -er / -est\n" +
+"long → longer → the longest\n\n" +
+"Long adjectives: more / most\n" +
+"beautiful → more beautiful → the most beautiful\n\n" +
+"Irregular:\n" +
+"good → better → the best\n" +
+"bad → worse → the worst",
+      ruRule:
+"Сравнительная и превосходная степени:\n" +
+"• короткие прилагательные: -er / -est\n" +
+"• длинные: more / most\n" +
+"• неправильные формы: good → better → best"
+    },
+
+    /* ===============================
+       7) EX 6 — Fill in the comparative forms
+       =============================== */
+    {
+      id:"ex6",
+      type:"build",
+      title:"Ex 6 — Comparative forms",
+      items:[
+        { words:["These","boots","are","nicer","than","those"], answer:"These boots are nicer than those." },
+        { words:["Ann","is","much","sportier","than","Mary"], answer:"Ann is much sportier than Mary." },
+        { words:["Today","is","hotter","than","yesterday"], answer:"Today is hotter than yesterday." },
+        { words:["Kelly","is","more","popular","than","Jill"], answer:"Kelly is more popular than Jill." }
+      ]
+    },
+
+    /* ===============================
+       8) EX 7 — Superlative forms
+       =============================== */
+    {
+      id:"ex7",
+      type:"build",
+      title:"Ex 7 — Superlative forms",
+      items:[
+        { words:["Usain","Bolt","is","the","fastest","runner"], answer:"Usain Bolt is the fastest runner." },
+        { words:["Thailand","has","the","longest","river"], answer:"Thailand has the longest river." },
+        { words:["The","Timores","are","the","shortest","people"], answer:"The Timores are the shortest people." }
+      ]
+    },
+
+    /* ===============================
+       9) EX 8 — Compare people (table)
+       =============================== */
+    {
+      id:"ex8",
+      type:"short",
+      title:"Ex 8 — Compare the people",
+      items:[
+        { q:"Tracy is heavier than Sofia." },
+        { q:"Paul is much heavier than Tracy." },
+        { q:"Tracy is as heavy as Paul." },
+        { q:"Paul is the heaviest of all." }
+      ]
+    },
+
+    /* ===============================
+       10) EX 9 — Choose the correct item
+       =============================== */
+    {
+      id:"ex9",
+      type:"choose",
+      title:"Ex 9 — Choose the correct item",
+      items:[
+        { q:"This is the ___ shop in the area.", opts:["large","larger","largest"], a:"largest" },
+        { q:"These boots are ___ expensive than those.", opts:["more","much","most"], a:"more" },
+        { q:"Sam is ___ of all to win the competition.", opts:["cleverest","clever","cleverer"], a:"cleverest" },
+        { q:"Jenny is taller ___ her sister.", opts:["in","of","than"], a:"than" }
+      ]
+    },
+
+    /* ===============================
+       11) EX 10 — Speaking (revision)
+       =============================== */
+    {
+      id:"ex10",
+      type:"short",
+      title:"Ex 10 — Speaking",
+      items:[
+        { q:"In three minutes, revise the use of English in Unit 1b. Make sentences using them." }
+      ]
+    }
+  ]
+}
 
     /* ======================================================
        LESSON 4 — Skills 1c

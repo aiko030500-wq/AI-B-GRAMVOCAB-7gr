@@ -23,11 +23,12 @@ body{
   font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
   color:var(--text);
 
+  /* 🔥 насыщенный алый фон */
   background:
-    radial-gradient(900px 500px at 15% 10%, rgba(46,204,113,.35), transparent 60%),
-    radial-gradient(900px 520px at 85% 12%, rgba(255,59,107,.35), transparent 60%),
-    radial-gradient(1100px 700px at 50% 115%, rgba(46,204,113,.25), transparent 65%),
-    linear-gradient(180deg, #f3fff7 0%, #ffffff 100%);
+    radial-gradient(900px 520px at 90% 0%, rgba(46,204,113,.25), transparent 60%),
+    radial-gradient(900px 520px at 10% 0%, rgba(255,255,255,.12), transparent 60%),
+    linear-gradient(180deg, #d4002a 0%, #b80024 55%, #8f001c 100%);
+  background-attachment: fixed;
 }
 
 /* ===== LAYOUT ===== */
@@ -182,3 +183,8 @@ body{
   .topbar,.bottomBar,.btn{display:none}
   .card{background:#fff;border:0}
 }
+.lessonBtn{
+  border:1px solid rgba(255,255,255,.25) !important;
+  box-shadow: 0 10px 25px rgba(0,0,0,.18);
+}
+.lessonBtn:hover{ filter:brightness(1.03); }

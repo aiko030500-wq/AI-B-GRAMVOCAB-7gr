@@ -1,147 +1,141 @@
 :root{
-  --text:#0f2a1c;
-  --muted:#2f6a4a;
-  --line:rgba(0,0,0,.08);
-
-  /* 📗 BOOK GREEN */
-  --green:#0aa35f;
-  --green2:#16c172;
-  --green3:#0b7a4a;
-
-  --red:#ff3b6b;
-  --card:#ffffff;
-  --ok:#12c987;
-  --bad:#ff4d4d;
+  --bg: #f5f7fb;          /* будет меняться через JS на самый светлый тон юнита */
+  --header: #0b6d77;      /* шапка */
+  --card: rgba(255,255,255,.86);
+  --stroke: rgba(0,0,0,.08);
+  --shadow: 0 10px 30px rgba(0,0,0,.10);
+  --r: 22px;
 }
 
-*{box-sizing:border-box}
-html, body { min-height:100%; }
-
-body{
-  margin:0;
-  font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
-  color:var(--text);
-
-  /* ✅ зелёный фон приложения */
-  background:
-    radial-gradient(900px 520px at 15% 0%, rgba(10,163,95,.28), transparent 60%),
-    radial-gradient(900px 520px at 85% 0%, rgba(22,193,114,.22), transparent 60%),
-    linear-gradient(180deg, #eafff3 0%, #f7fffb 45%, #eafff3 100%);
-  background-attachment: fixed;
+html,body{
+  margin:0; padding:0;
+  background: var(--bg);
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
 }
 
-.wrap{max-width:1050px;margin:0 auto;padding:16px 14px 120px}
+#app{ min-height:100vh; }
 
-.topbar{
-  display:flex;align-items:center;gap:12px;
-  padding:12px;border-radius:18px;
-  background:linear-gradient(135deg, rgba(10,163,95,.22), rgba(22,193,114,.16)), #fff;
-  border:1px solid var(--line);
+/* ====== HEADER (как на скрине) ====== */
+.header{
+  background: var(--header);
+  color:#fff;
+  padding: 16px 16px 18px;
+  border-bottom-left-radius: 26px;
+  border-bottom-right-radius: 26px;
+  box-shadow: 0 10px 24px rgba(0,0,0,.18);
+  position: sticky;
+  top:0;
+  z-index:10;
+}
+
+.headerRow{
+  display:flex;
+  align-items:center;
+  gap:12px;
 }
 
 .logo{
-  width:44px;height:44px;border-radius:14px;overflow:hidden;
-  border:1px solid var(--line);background:#fff;display:grid;place-items:center;
-}
-.logo img{width:100%;height:100%;object-fit:cover}
-
-.girlBadge{
-  width:46px;height:46px;border-radius:16px;
-  background:#fff;border:1px solid var(--line);
-  display:grid;place-items:center;font-size:22px;
+  width:56px; height:56px;
+  border-radius: 50%;
+  background:#fff;
+  padding:4px;
+  box-shadow: 0 6px 16px rgba(0,0,0,.18);
+  object-fit: cover;
 }
 
-.brand b{font-size:16px}
-.brand span{font-size:12px;color:var(--muted)}
+.brandTitle{ font-size:18px; font-weight:800; line-height:1.1; }
+.brandSub{ opacity:.9; font-weight:700; margin-top:4px; }
 
-.pill{
-  margin-left:auto;
-  padding:8px 12px;border-radius:999px;
-  border:1px solid var(--line);background:#fff;font-size:12px;
+/* ====== LAYOUT ====== */
+.container{
+  padding: 16px;
+  max-width: 520px;
+  margin: 0 auto;
 }
 
+/* ====== UNIT CARD (как у тебя: белая карточка + цветная рамка) ====== */
+.unitCard{
+  background: var(--card);
+  border-radius: var(--r);
+  padding: 18px;
+  margin: 12px 0;
+  border: 3px solid var(--stroke); /* мы будем подменять stroke на цвет рамки */
+  box-shadow: 0 10px 24px rgba(0,0,0,.08);
+}
+
+.unitTitle{ font-size:26px; font-weight:900; margin:0; color:#111; }
+.unitTopic{ margin-top:6px; font-size:20px; font-weight:800; color: rgba(0,0,0,.55); }
+
+/* ====== внутри юнита: большая цветная карточка заголовка ====== */
+.hero{
+  border-radius: 26px;
+  padding: 18px;
+  color:#fff;
+  box-shadow: 0 12px 26px rgba(0,0,0,.18);
+  border: 4px solid rgba(255,255,255,.28);
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:14px;
+}
+
+.hero h2{ margin:0; font-size:30px; font-weight:900; }
+.hero p{ margin:8px 0 0; font-size:18px; font-weight:800; opacity:.95; }
+
+.heroImg{
+  width:86px; height:86px; border-radius: 50%;
+  background:#fff; padding:5px;
+  object-fit: cover;
+}
+
+/* ====== белая карточка правила ====== */
 .card{
-  margin-top:14px;padding:14px;border-radius:18px;
-  background:#fff;border:1px solid var(--line);
+  background: var(--card);
+  border-radius: 22px;
+  padding: 16px;
+  margin: 14px 0;
+  box-shadow: 0 10px 24px rgba(0,0,0,.08);
+  border: 1px solid rgba(0,0,0,.06);
 }
 
-.grid{display:grid;grid-template-columns:repeat(12,1fr);gap:12px}
-.col-6{grid-column:span 6}
-.col-12{grid-column:span 12}
-@media(max-width:860px){.col-6{grid-column:span 12}}
+/* ====== кнопки упражнений (2x2 как на скрине) ====== */
+.grid2{
+  display:grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-top: 12px;
+}
+
+.exBtn{
+  border:none;
+  padding: 14px 14px;
+  border-radius: 18px;
+  font-weight: 900;
+  font-size: 16px;
+  color:#fff;
+  box-shadow: 0 10px 18px rgba(0,0,0,.16);
+}
+
+.exBtn.muted{ opacity:.45; }
+
+/* ====== низ: кнопки Check/Back/Print ====== */
+.row3{
+  display:flex;
+  gap:12px;
+  margin-top: 12px;
+}
 
 .btn{
-  border:0;cursor:pointer;
-  padding:10px 14px;border-radius:14px;
-  font-weight:900;color:#fff;
-  background:linear-gradient(135deg,var(--green2),var(--green));
-}
-.btn:active{transform:translateY(1px)}
-.btn.secondary{
-  background:#fff;color:var(--text);
-  border:1px solid var(--line);font-weight:800;
+  flex:1;
+  padding: 14px;
+  border-radius: 18px;
+  font-weight: 900;
+  border: 2px solid rgba(0,0,0,.10);
+  background: rgba(255,255,255,.9);
 }
 
-.input{
-  width:100%;padding:12px 12px;border-radius:14px;
-  border:1px solid var(--line);background:#fff;color:var(--text);outline:none;
-}
-
-.hr{height:1px;background:rgba(0,0,0,.08);margin:12px 0}
-.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
-.small{font-size:12px;color:var(--muted)}
-.msg{padding:10px 12px;border-radius:14px;border:1px solid var(--line);background:#fff;color:var(--muted)}
-
-.moduleCard{
-  padding:16px;border-radius:18px;border:1px solid var(--line);
-  background:linear-gradient(135deg, rgba(255,255,255,.6), #fff);
-}
-.moduleHead{display:flex;justify-content:space-between;align-items:center}
-.tag{font-size:12px}
-
-.lessons{margin-top:10px;display:grid;gap:10px;grid-template-columns:repeat(4,1fr)}
-@media(max-width:860px){.lessons{grid-template-columns:repeat(2,1fr)}}
-
-.lessonBtn{
-  border:1px solid rgba(0,0,0,.08);
-  border-radius:16px;padding:12px 10px;cursor:pointer;
-  color:#fff;text-align:left;
-  box-shadow:0 10px 25px rgba(0,0,0,.10);
-}
-.lessonBtn b{display:block;font-size:13px;margin-bottom:4px}
-.lessonBtn span{font-size:11px;color:rgba(255,255,255,.92)}
-.lessonBtn:active{transform:translateY(1px)}
-
-.tabs{display:flex;gap:10px;flex-wrap:wrap;margin-top:10px}
-.tabBtn{
-  padding:10px 12px;border-radius:999px;cursor:pointer;
-  border:1px solid var(--line);background:#fff;color:var(--text);
-  font-weight:900;font-size:12px;
-}
-.tabBtn.active{
-  background:linear-gradient(135deg,var(--green2),var(--green));
-  color:#fff;border:0;
-}
-
-/* bottom bar */
-.bottomBar{
-  position:fixed;left:0;right:0;bottom:0;
-  padding:10px;background:linear-gradient(135deg, rgba(10,163,95,.28), rgba(22,193,114,.22)), #fff;
-  border-top:1px solid var(--line);
-}
-.bottomInner{max-width:1050px;margin:0 auto;display:flex;gap:10px}
-.bItem{
-  flex:1;padding:12px;border-radius:16px;border:1px solid var(--line);
-  background:#fff;color:var(--text);font-weight:900;display:flex;justify-content:center;gap:8px
-}
-.bItem.primary{
-  background:linear-gradient(135deg,var(--green2),var(--green));
-  color:#fff;border:0;
-}
-
-/* print */
-@media print{
-  body{background:#fff;color:#000}
-  .topbar,.bottomBar,.tabs,.btn{display:none !important;}
-  .card{background:#fff;border:0}
+.btn.primary{
+  color:#fff;
+  border:none;
+  box-shadow: 0 10px 18px rgba(0,0,0,.16);
 }

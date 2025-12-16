@@ -6,19 +6,14 @@ window.APP_DATA = {
   auth: {
     studentPin: "2844",
     teacherPin: "3244",
-    // логины (поменяй как тебе нужно)
-  auth: {
-  studentPin: "2844",
-  teacherPin: "3244",
+    allowedLogins: [
+      // 7BLr1 – 7BLr15
+      ...Array.from({ length: 15 }, (_, i) => `7BLr${i + 1}`),
 
-  allowedLogins: [
-    // 7BLr1 – 7BLr15
-    ...Array.from({ length: 15 }, (_, i) => `7BLr${i + 1}`),
-
-    // 7VSt16 – 7VSt35
-    ...Array.from({ length: 20 }, (_, i) => `7VSt${i + 16}`)
-  ]
-},
+      // 7VSt16 – 7VSt35
+      ...Array.from({ length: 20 }, (_, i) => `7VSt${i + 16}`)
+    ]
+  },
 
   // 9 МОДУЛЕЙ
   modules: [
@@ -30,18 +25,14 @@ window.APP_DATA = {
     { id:"m6", title:"Module 6 — Entertainment & Media", color:"#ff3dbb", lessonsCount: 10 },
     { id:"m7", title:"Module 7 — Natural Disasters", color:"#ff2d2d", lessonsCount: 10 },
     { id:"m8", title:"Module 8 — Healthy Habits", color:"#00e6b8", lessonsCount: 10 },
-    { id:"m9", title:"Module 9 — Clothes & Fashion", color:"#ffd000", lessonsCount: 10 },
+    { id:"m9", title:"Module 9 — Clothes & Fashion", color:"#ffd000", lessonsCount: 10 }
   ],
 
-  // КОНТЕНТ (пока делаем Module 1: Lesson 1 готов, остальные — каркас)
+  // КОНТЕНТ
   lessonContent: {
-    // ==============
-    // Module 1 · Lesson 1 (Vocabulary page)
-    // ==============
     "m1|1": {
       title: "Lesson 1 — Vocabulary: Free-time activities",
       bookPage: 5,
-
       vocabCards: [
         { emoji:"💃", en:"dancing", ru:"танцы", tts:"dancing" },
         { emoji:"🍳", en:"cooking", ru:"готовка", tts:"cooking" },
@@ -79,10 +70,7 @@ window.APP_DATA = {
       ]
     },
 
-    // Module 1 · Lesson 1a (будем наполнять идеально по книге)
     "m1|2": { title:"Lesson 1a — Reading 1a", bookPage: 6, note:"Дальше заполняем строго по книге." },
-
-    // 1b делим на 2 урока
     "m1|3": { title:"Lesson 1b (Part 1) — Grammar", bookPage: 7, note:"Present Simple/Continuous + Plurals." },
     "m1|4": { title:"Lesson 1b (Part 2) — Comparatives", bookPage: 8, note:"Comparatives/Superlatives + exercises." },
 
@@ -91,6 +79,6 @@ window.APP_DATA = {
     "m1|7": { title:"Lesson 1e", bookPage: 12, note:"Заполним по книге." },
     "m1|8": { title:"Lesson 1f", bookPage: 13, note:"Заполним по книге." },
     "m1|9": { title:"Lesson 1g", bookPage: 14, note:"Заполним по книге." },
-    "m1|10": { title:"Edutainment", bookPage: 15, note:"Заполним по книге." },
+    "m1|10": { title:"Edutainment", bookPage: 15, note:"Заполним по книге." }
   }
 };

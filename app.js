@@ -1,5 +1,6 @@
 (() => {
   const root = document.getElementById("app");
+
   const STATE = {
     screen: "login",      // login | modules | lessons | lesson | chat
     moduleId: null,
@@ -12,9 +13,12 @@
 
   // ---------- safety ----------
   if (!window.APP_DATA) {
-    root.innerHTML = "<div style='padding:16px;font:16px system-ui'>❌ APP_DATA не найден. Проверь data.js</div>";
+    root.innerHTML =
+      "<div style='padding:16px;font:16px system-ui'>❌ APP_DATA не найден. Проверь подключение data.js</div>";
     return;
   }
+  // ✅ ВАЖНО: дальше работаем через APP_DATA
+  const APP_DATA = window.APP_DATA;
 
   // ---------- helpers ----------
   function escapeHtml(s) {
@@ -31,12 +35,12 @@
   }
 
   function setTheme(color) {
-    const light = mixWithWhite(color, 0.90); // самый светлый тон модуля вместо белого
+    const light = mixWithWhite(color, 0.90);
     document.documentElement.style.setProperty("--pageBg", light);
   }
 
   function shadeForLessonCard(moduleColor, idx, total) {
-    const t = 0.20 + (idx / Math.max(1, total - 1)) * 0.55; // 0.20..0.75
+    const t = 0.20 + (idx / Math.max(1, total - 1)) * 0.55;
     return mixWithWhite(moduleColor, t);
   }
 
@@ -55,11 +59,10 @@
     `;
   }
 
-  // ---------- TTS (AI Bayan) ----------
+  // ---------- TTS ----------
   function speak(text) {
     const t = String(text || "").trim();
     if (!t) return;
-
     try {
       window.speechSynthesis.cancel();
       const u = new SpeechSynthesisUtterance(t);
@@ -67,12 +70,10 @@
       u.rate = 0.9;
       u.pitch = 1.05;
       window.speechSynthesis.speak(u);
-    } catch (e) {
-      // ignore
-    }
+    } catch (e) {}
   }
 
-  // ---------- PRINT (watermark + footer) ----------
+  // ---------- PRINT ----------
   function ensurePrintLayers() {
     if (!document.getElementById("printWatermark")) {
       const wm = document.createElement("div");
@@ -124,7 +125,7 @@
           <div class="line"></div>
 
           <div class="label">Login</div>
-          <input class="input" id="login" placeholder="например: 7E1" autocomplete="off"/>
+          <input class="input" id="login" placeholder="например: 7BLr1" autocomplete="off"/>
 
           <div class="label">PIN</div>
           <input class="input" id="pin" placeholder="****" inputmode="numeric" autocomplete="off"/>
@@ -153,12 +154,14 @@
 
       if (pin === A.studentPin) {
         STATE.user = { role: "student", login };
+        STATE.moduleId = APP_DATA.modules?.[0]?.id || "m1"; // ✅ после входа
         STATE.screen = "modules";
         render();
         return;
       }
       if (pin === A.teacherPin) {
         STATE.user = { role: "teacher", login };
+        STATE.moduleId = APP_DATA.modules?.[0]?.id || "m1"; // ✅ после входа
         STATE.screen = "modules";
         render();
         return;
@@ -332,12 +335,11 @@
     $("#backLessons").onclick = () => { STATE.screen = "lessons"; render(); };
     $("#printLessonBtn").onclick = () => printLesson(mod.color);
 
-    // wire TTS buttons
     document.querySelectorAll("[data-say]").forEach(btn => {
       btn.onclick = () => speak(btn.getAttribute("data-say"));
     });
 
-    wireInteractions(); // categorise + phrases
+    wireInteractions();
   }
 
   function renderChat() {
@@ -401,7 +403,7 @@
     draw();
   }
 
-  // ---------- exercises render ----------
+  // ---------- exercises ----------
   function renderCategorise(ex) {
     const id = "cat_" + Math.random().toString(16).slice(2);
     return `
@@ -526,8 +528,10 @@
     else renderLesson();
   }
 
-  // start
-  STATE.moduleId = APP_DATA.modules?.[0]?.id || "m1";
+  // ---------- start ----------
+  // ✅ СТАРТ ВСЕГДА С ЛОГИНА
+  STATE.screen = "login";
+  STATE.moduleId = null;
+  STATE.lessonKey = null;
   render();
-
 })();
